@@ -9,7 +9,6 @@ Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Googl
 gaql.py -f path-to-google-ads.yaml -c <customer-id>
 
 >>> SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id
-
 +--------------------------------+-------------+
 |              name              |      id     |
 +--------------------------------+-------------+
