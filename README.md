@@ -1,9 +1,20 @@
-# GAQL (Google Ads Query Language) Shell
+# Google Ads Control CLI
+
+[![PyPI - Version](https://img.shields.io/pypi/v/adsctl.svg)](https://pypi.org/project/adsctl)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/adsctl.svg)](https://pypi.org/project/adsctl)
 
 A command line tool for executing GAQL queries against the Google Ads API.
 Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 
+## Installation
+
+```console
+pip install adsctl
+```
+
 ## Usage
+
+### Shell
 
 ```
 gaql.py -f path-to-google-ads.yaml -c <customer-id>
