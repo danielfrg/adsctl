@@ -43,9 +43,16 @@ dependencies = [
   "click",
   "prettytable",
   "prompt_toolkit",
+]
+
+[project.optional-dependencies]
+dev = [
+  "black",
+  "pylint",
   "pytest",
   "pytest-cov",
 ]
+
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=adsctl --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
