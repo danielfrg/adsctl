@@ -1,4 +1,4 @@
-# Google Ads Control CLI
+# Google Ads Control CLI and Prompt
 
 [![PyPI - Version](https://img.shields.io/pypi/v/adsctl.svg)](https://pypi.org/project/adsctl)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/adsctl.svg)](https://pypi.org/project/adsctl)
@@ -6,9 +6,9 @@
 Features:
 
 - Command line tool for managing Google Ads accounts.
-Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for Google Ads.
+  Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for Google Ads.
 - A command line tool for executing GAQL queries against the Google Ads API.
-Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
+  Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 
 ## Installation
 

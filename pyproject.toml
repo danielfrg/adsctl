@@ -1,6 +1,6 @@
 [project]
 name = "adsctl"
-description = "Google Ads Control CLI"
+description = "Google Ads Control CLI and Prompt"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "Apache-2.0"
@@ -16,7 +16,12 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["google-ads", "click", "prettytable", "prompt_toolkit"]
+dependencies = [
+  "google-ads>=20.0.0",
+  "click>=8.1",
+  "prettytable>=3.6.0",
+  "prompt_toolkit>=3.0.38",
+]
 dynamic = ["version"]
 
 [project.urls]
@@ -25,10 +30,11 @@ Issues = "https://github.com/danielfrg/adsctl/issues"
 Source = "https://github.com/danielfrg/adsctl"
 
 [project.optional-dependencies]
-dev = ["black", "pylint", "pytest", "pytest-cov"]
+test = ["pytest", "pytest-cov"]
 
 [project.scripts]
 gaql = "adsctl.prompt:main"
+adsctl = "adsctl.cli.cli:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -38,7 +44,9 @@ build-backend = "hatchling.build"
 path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
-dependencies = ["pytest", "pytest-cov"]
+features = ["test"]
+dependencies = ["black", "isort", "flake8", "pylint"]
+
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
