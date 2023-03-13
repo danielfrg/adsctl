@@ -12,7 +12,7 @@ Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Googl
 
 ## Installation
 
-```console
+```shell
 pip install adsctl
 ```
 
@@ -22,7 +22,7 @@ pip install adsctl
 
 An interactive shell for executing GAQL queries against the Google Ads API.
 
-```console
+```
 gaql -f path-to-google-ads.yaml -c <customer-id>
 
 >>> SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id
