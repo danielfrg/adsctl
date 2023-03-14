@@ -16,13 +16,27 @@ Features:
 pip install adsctl
 ```
 
-## Usage
+## CLI
 
-### Shell
+### Authentication
+
+```shell
+adsctl auth <path-to-secret.json>
+```
+
+### Campaign Management
+
+#### Update budget
+
+```shell
+adsctl -c <customer-id> campaign -i <campaign-id> budget <amount>
+```
+
+## Prompt
 
 An interactive shell for executing GAQL queries against the Google Ads API.
 
-```
+```shell
 gaql -f path-to-google-ads.yaml -c <customer-id>
 
 >>> SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id

@@ -1,3 +1,4 @@
+import logging
 import os
 
 import click
@@ -5,7 +6,12 @@ from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
 
 from adsctl.cli.auth import auth
-from adsctl.cli.update import update
+from adsctl.cli.edit.edit import edit
+
+logging.basicConfig(
+    level=logging.INFO, format="[%(asctime)s - %(levelname)s] %(message).5000s"
+)
+logging.getLogger("google.ads.googleads.client").setLevel(logging.INFO)
 
 
 @click.group()
@@ -23,7 +29,7 @@ def main(ctx, config):
 
 
 main.add_command(auth)
-main.add_command(update)
+main.add_command(edit)
 
 
 class Context:
