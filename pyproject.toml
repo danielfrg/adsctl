@@ -40,6 +40,9 @@ adsctl = "adsctl.cli.cli:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+exclude = [".github"]
+
 [tool.hatch.version]
 path = "src/adsctl/__about__.py"
 
