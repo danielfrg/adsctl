@@ -5,7 +5,7 @@ import sys
 import click
 from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
-from google.protobuf import json_format
+from google.protobuf.json_format import MessageToDict
 from prettytable import PrettyTable
 from prompt_toolkit import PromptSession
 
@@ -25,7 +25,7 @@ def main(config, customer_id):
     try:
         # GoogleAdsClient will read the google-ads.yaml configuration file in the
         # home directory if none is specified.
-        googleads_client = GoogleAdsClient.load_from_storage(config, version="v12")
+        googleads_client = GoogleAdsClient.load_from_storage(config, version="v13")
 
         customer_id = customer_id.replace("-", "")
         prompt(googleads_client, customer_id)
@@ -49,11 +49,13 @@ def prompt(client, customer_id):
     ignoreFields = ("resourceName",)
     while True:
         try:
-            query = session.prompt(">>> ")
+            query = session.prompt(">>> ").strip()
 
             if not query:
-                print(1)
                 continue
+
+            if query == "exit":
+                sys.exit(0)
 
             stream = ga_service.search_stream(customer_id=customer_id, query=query)
 
@@ -61,13 +63,12 @@ def prompt(client, customer_id):
 
             count = 0
             for batch in stream:
-                try:
-                    for row in batch.results:
+                for row in batch.results:
+                    try:
                         count += 1
-                        json_str = json_format.MessageToJson(row)
-                        d = json.loads(json_str)
+                        results_dict = MessageToDict(row._pb)
 
-                        for table, values in d.items():
+                        for table, values in results_dict.items():
                             if table not in tables:
                                 tables[table] = PrettyTable()
                                 tables[table].field_names = [
@@ -83,18 +84,23 @@ def prompt(client, customer_id):
                                         if key not in ignoreFields
                                     ]
                                 )
-                    for table, prettyTable in tables.items():
-                        print(prettyTable)
-                except Exception as e:
-                    for row in batch.results:
+                    except Exception as e:
                         count += 1
                         print(row)
+
+            for table, prettyTable in tables.items():
+                print(prettyTable)
+
             if count == 0:
                 print("No results found")
-                continue
+
+        except GoogleAdsException as ex:
+            # Continue on query errors
+            print(ex)
         except KeyboardInterrupt:
             pass
         except EOFError:
+            # Control-D pressed
             sys.exit()
 
 
