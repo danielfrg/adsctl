@@ -27,6 +27,7 @@ def main(config, customer_id):
         # home directory if none is specified.
         googleads_client = GoogleAdsClient.load_from_storage(config, version="v12")
 
+        customer_id = customer_id.replace("-", "")
         prompt(googleads_client, customer_id)
     except GoogleAdsException as ex:
         print(
@@ -46,38 +47,51 @@ def prompt(client, customer_id):
     session = PromptSession()
 
     ignoreFields = ("resourceName",)
-
     while True:
         try:
             query = session.prompt(">>> ")
+
+            if not query:
+                print(1)
+                continue
 
             stream = ga_service.search_stream(customer_id=customer_id, query=query)
 
             tables = {}
 
+            count = 0
             for batch in stream:
-                for row in batch.results:
-                    json_str = json_format.MessageToJson(row)
-                    d = json.loads(json_str)
+                try:
+                    for row in batch.results:
+                        count += 1
+                        json_str = json_format.MessageToJson(row)
+                        d = json.loads(json_str)
 
-                    for table, values in d.items():
-                        if table not in tables:
-                            tables[table] = PrettyTable()
-                            tables[table].field_names = [
-                                key for key in values.keys() if key not in ignoreFields
-                            ]
-                        else:
-                            tables[table].add_row(
-                                [
-                                    value
-                                    for key, value in values.items()
+                        for table, values in d.items():
+                            if table not in tables:
+                                tables[table] = PrettyTable()
+                                tables[table].field_names = [
+                                    key
+                                    for key in values.keys()
                                     if key not in ignoreFields
                                 ]
-                            )
-
-            for table, prettyTable in tables.items():
-                print(prettyTable)
-
+                            else:
+                                tables[table].add_row(
+                                    [
+                                        value
+                                        for key, value in values.items()
+                                        if key not in ignoreFields
+                                    ]
+                                )
+                    for table, prettyTable in tables.items():
+                        print(prettyTable)
+                except Exception as e:
+                    for row in batch.results:
+                        count += 1
+                        print(row)
+            if count == 0:
+                print("No results found")
+                continue
         except KeyboardInterrupt:
             pass
         except EOFError:
