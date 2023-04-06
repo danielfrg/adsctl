@@ -46,7 +46,7 @@ def prompt(client, customer_id):
     ga_service = client.get_service("GoogleAdsService")
     session = PromptSession()
 
-    ignoreFields = ("resourceName",)
+    ignoreFields = ()
     while True:
         try:
             query = session.prompt(">>> ").strip()
@@ -65,6 +65,10 @@ def prompt(client, customer_id):
             for batch in stream:
                 for row in batch.results:
                     try:
+                        if count == 0:
+                            # Empty line to give space between queries
+                            print("")
+
                         count += 1
                         results_dict = MessageToDict(row._pb)
 
