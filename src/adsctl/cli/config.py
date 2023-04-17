@@ -6,8 +6,8 @@ import click
 @click.group()
 @click.pass_obj
 def config(app):
-    """View and manage configuration
-    """
+    """View and manage configuration"""
+
 
 @config.command()
 @click.pass_obj
