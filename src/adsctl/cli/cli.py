@@ -2,10 +2,9 @@ import logging
 import sys
 
 import click
-from google.ads.googleads.client import GoogleAdsClient
-from google.ads.googleads.errors import GoogleAdsException
 
 from adsctl.__about__ import __version__
+from adsctl.cli.app import Application
 from adsctl.cli.auth import auth
 from adsctl.cli.config import config
 from adsctl.cli.edit.edit import edit
@@ -29,10 +28,10 @@ logging.getLogger("google.ads.googleads.client").setLevel(logging.INFO)
 @click.version_option(version=__version__, prog_name="AdsCTL")
 @click.pass_context
 def main(ctx: click.Context, config_file_path):
-    """Google Ads CLI"""
+    """Google Ads CLI."""
 
     used_config_file = Path()
-    app = Context(
+    app = Application(
         config_file=ConfigFile()
     )
 
@@ -62,12 +61,6 @@ def main(ctx: click.Context, config_file_path):
 main.add_command(auth)
 main.add_command(edit)
 main.add_command(config)
-
-
-class Context:
-    def __init__(self, config_file):
-        self.config_file: ConfigFile = config_file
-        self.client = None
 
 
 if __name__ == "__main__":

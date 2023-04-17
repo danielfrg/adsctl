@@ -2,15 +2,16 @@ import os
 import sys
 
 import click
-from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
 from google.protobuf.json_format import MessageToDict
 from prettytable import PrettyTable
 from prompt_toolkit import PromptSession
 
 from adsctl.__about__ import __version__
+from adsctl.cli.app import Application
 from adsctl.config.config_file import ConfigFile
 from adsctl.utils.fs import Path
+from adsctl.utils.googleads import get_client as get_google_ads_client
 
 
 @click.command()
@@ -28,38 +29,38 @@ from adsctl.utils.fs import Path
 def main(ctx: click.Context, config_file_path, customer_id_opt, plain):
     """Interactive GAQL prompt."""
 
-    app = {
-        "path": Path().resolve(),
-        "config_file": ConfigFile(),
-    }
+    used_config_file = Path()
+    app = Application(
+        config_file=ConfigFile()
+    )
 
     if config_file_path:
-        app["path"] = Path(config_file_path).resolve()
-        if not app["path"].is_file():
+        used_config_file = Path(config_file_path).resolve()
+        if not used_config_file.is_file():
             click.echo(f'The selected config file `{str(config_file_path)}` does not exist.')
             sys.exit(1)
-        app["config_file"] = ConfigFile(app["path"])
-    elif not app["config_file"].path.is_file():
+        app.config_file = ConfigFile(used_config_file)
+    elif not app.config_file.path.is_file():
         click.echo('No config file found, creating one with default settings now...')
 
         try:
-            app["config_file"].restore()
-            click.echo(f'Default config file created at: {app["config_file"].path}')
+            app.config_file.restore()
+            click.echo(f'Default config file created at: {app.config_file.path}')
             click.echo(f'Edit that file to include your Google Ads credentials.')
             sys.exit(0)
         except OSError:  # no cov
             click.echo(
-                f'Unable to create config file located at `{str(app["config_file"].path)}`. Please check your permissions.',
+                f'Unable to create config file located at `{str(app.config_file.path)}`. Please check your permissions.',
                 err=True
             )
 
-    click.echo(f"Using config: ${app['config_file'].path}")
-    app["config_file"].load()
-    print(app["config_file"])
-    settings = app["config_file"].model
+    ctx.obj = app
+
+    click.echo(f"Using config: ${app.config_file.path}")
+    app.config_file.load()
+    settings = app.config_file.model
 
     google_ads_config = {
-        "developer_token": settings.developer_token,
         "developer_token": settings.developer_token,
         "client_id": settings.oauth.client_id,
         "client_secret": settings.oauth.client_secret,
@@ -67,32 +68,17 @@ def main(ctx: click.Context, config_file_path, customer_id_opt, plain):
         "use_proto_plus": False
     }
 
-    try:
-        # GoogleAdsClient will read the google-ads.yaml configuration file in the
-        # home directory if none is specified.
-        googleads_client = GoogleAdsClient.load_from_dict(google_ads_config, version="v13")
+    customer_id = settings.customer_id
+    if customer_id_opt is not None:
+        customer_id = customer_id_opt
+    customer_id = customer_id.replace("-", "")
+    app.customer_id = customer_id
 
-        # Persist app data for sub-commands
-        app["google_ads_client"] = googleads_client
-        ctx.obj = app
+    print(google_ads_config)
 
-        customer_id = settings.customer_id
-        if customer_id_opt is not None:
-            customer_id = customer_id_opt
-
-        customer_id = customer_id.replace("-", "")
-        prompt(googleads_client, customer_id, plain=plain)
-    except GoogleAdsException as ex:
-        print(
-            f'Request with ID "{ex.request_id}" failed with status '
-            f'"{ex.error.code().name}" and includes the following errors:'
-        )
-        for error in ex.failure.errors:
-            print(f'\tError with message "{error.message}".')
-            if error.location:
-                for field_path_element in error.location.field_path_elements:
-                    print(f"\t\tOn field: {field_path_element.field_name}")
-        sys.exit(1)
+    google_ads_client = get_google_ads_client(google_ads_config)
+    app.client = google_ads_client
+    prompt(google_ads_client, customer_id, plain=plain)
 
 
 def prompt(client, customer_id, plain=False):

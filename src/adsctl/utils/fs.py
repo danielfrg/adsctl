@@ -3,6 +3,13 @@ from __future__ import annotations
 import os
 import pathlib
 import sys
+from typing import Any
+
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+
 
 if sys.platform == 'win32':
     _PathBase = pathlib.WindowsPath
@@ -54,3 +61,12 @@ class Path(_PathBase):
             disk_sync(fd)
 
         os.replace(path, self)
+
+
+def load_toml_data(data: str) -> dict[str, Any]:
+    return tomllib.loads(data)
+
+
+def load_toml_file(path: str) -> dict[str, Any]:
+    with open(path, encoding='utf-8') as f:
+        return tomllib.loads(f.read())
