@@ -7,7 +7,6 @@ import sys
 from urllib.parse import unquote
 
 import click
-
 # If using Web flow, the redirect URL must match exactly what’s configured in GCP for
 # the OAuth client.  If using Desktop flow, the redirect must be a localhost URL and
 # is not explicitly set in GCP.
@@ -24,12 +23,13 @@ _REDIRECT_URI = f"http://{_SERVER}:{_PORT}"
     "secrets_file",
     type=click.Path(exists=True),
 )
-def auth(secrets_file):
+@click.pass_context
+def auth(ctx: click.Context, secrets_file):
     """Authenticate with Google Ads API.
-
-    Args:
-        secrets_file: Path to the client secrets JSON file from the Google Developers Console that contains your client ID, client secret, and redirect URIs.
     """
+
+    # Do the OAuth flow to get a refresh token.
+
     configured_scopes = [_SCOPE]
 
     # if args.additional_scopes:
@@ -65,12 +65,21 @@ def auth(secrets_file):
     flow.fetch_token(code=code)
     refresh_token = flow.credentials.refresh_token
 
-    print(f"\nYour refresh token is: {refresh_token}\n")
-    print(
-        "Add your refresh token to your client library configuration as "
-        "described here: "
-        "https://developers.google.com/google-ads/api/docs/client-libs/python/configuration"
-    )
+    click.echo(f"\nYour refresh token is: {refresh_token}\n")
+    click.echo("Updating config file to include refresh token")
+
+    with open(ctx.obj.config_file.path, "r") as f:
+        content = f.read()
+
+    with open(ctx.obj.config_file.path, "w") as f:
+        if "refresh_token" in content:
+            content = re.sub(r"refresh_token = .*", f'refresh_token = "{refresh_token}"', content)
+        else:
+            content = content + f'\nrefresh_token = "{refresh_token}"\n'
+        f.write(content)
+
+    click.echo("Done! You can now run adsctl commands.")
+
 
 
 def get_authorization_code(passthrough_val):

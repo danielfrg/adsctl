@@ -19,8 +19,11 @@ classifiers = [
 dependencies = [
   "google-ads>=20.0.0",
   "click>=8.1",
+  "pydantic>=1.10.0,<2.0.0",
   "prettytable>=3.6.0",
   "prompt_toolkit>=3.0.38",
+  "tomli-w>=1.0",
+  "tomlkit>=0.11.1",
 ]
 dynamic = ["version"]
 
@@ -33,7 +36,7 @@ Source = "https://github.com/danielfrg/adsctl"
 test = ["pytest", "pytest-cov"]
 
 [project.scripts]
-gaql = "adsctl.prompt:main"
+gaql = "adsctl.prompt.cli:main"
 adsctl = "adsctl.cli.cli:main"
 
 [build-system]
