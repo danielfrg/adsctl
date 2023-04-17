@@ -1,21 +1,6 @@
-import argparse
-import hashlib
-import os
-import re
-import socket
-import sys
 from urllib.parse import unquote
 
 import click
-# If using Web flow, the redirect URL must match exactly what’s configured in GCP for
-# the OAuth client.  If using Desktop flow, the redirect must be a localhost URL and
-# is not explicitly set in GCP.
-from google_auth_oauthlib.flow import Flow
-
-_SCOPE = "https://www.googleapis.com/auth/adwords"
-_SERVER = "127.0.0.1"
-_PORT = 8080
-_REDIRECT_URI = f"http://{_SERVER}:{_PORT}"
 
 
 @click.group()
