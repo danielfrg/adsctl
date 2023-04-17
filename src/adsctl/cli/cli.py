@@ -7,6 +7,7 @@ from google.ads.googleads.errors import GoogleAdsException
 
 from adsctl.__about__ import __version__
 from adsctl.cli.auth import auth
+from adsctl.cli.config import config
 from adsctl.cli.edit.edit import edit
 from adsctl.config.config_file import ConfigFile
 from adsctl.utils.fs import Path
@@ -60,6 +61,7 @@ def main(ctx: click.Context, config_file_path):
 
 main.add_command(auth)
 main.add_command(edit)
+main.add_command(config)
 
 
 class Context:
