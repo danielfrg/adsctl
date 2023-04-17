@@ -11,7 +11,7 @@ else:
     import tomli as tomllib
 
 
-if sys.platform == 'win32':
+if sys.platform == "win32":
     _PathBase = pathlib.WindowsPath
 else:
     _PathBase = pathlib.PosixPath
@@ -20,10 +20,10 @@ else:
 disk_sync = os.fsync
 # https://mjtsai.com/blog/2022/02/17/apple-ssd-benchmarks-and-f_fullsync/
 # https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/fsync.2.html
-if sys.platform == 'darwin':
+if sys.platform == "darwin":
     import fcntl
 
-    if hasattr(fcntl, 'F_FULLFSYNC'):
+    if hasattr(fcntl, "F_FULLFSYNC"):
 
         def disk_sync(fd) -> None:
             fcntl.fcntl(fd, fcntl.F_FULLFSYNC)
@@ -68,5 +68,5 @@ def load_toml_data(data: str) -> dict[str, Any]:
 
 
 def load_toml_file(path: str) -> dict[str, Any]:
-    with open(path, encoding='utf-8') as f:
+    with open(path, encoding="utf-8") as f:
         return tomllib.loads(f.read())

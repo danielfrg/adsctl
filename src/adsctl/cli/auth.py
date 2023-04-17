@@ -1,4 +1,3 @@
-import argparse
 import hashlib
 import os
 import re
@@ -7,6 +6,7 @@ import sys
 from urllib.parse import unquote
 
 import click
+
 # If using Web flow, the redirect URL must match exactly what’s configured in GCP for
 # the OAuth client.  If using Desktop flow, the redirect must be a localhost URL and
 # is not explicitly set in GCP.
@@ -25,8 +25,7 @@ _REDIRECT_URI = f"http://{_SERVER}:{_PORT}"
 )
 @click.pass_context
 def auth(ctx: click.Context, secrets_file):
-    """Authenticate with Google Ads API.
-    """
+    """Authenticate with Google Ads API."""
 
     # Do the OAuth flow to get a refresh token.
 
@@ -73,13 +72,14 @@ def auth(ctx: click.Context, secrets_file):
 
     with open(ctx.obj.config_file.path, "w") as f:
         if "refresh_token" in content:
-            content = re.sub(r"refresh_token = .*", f'refresh_token = "{refresh_token}"', content)
+            content = re.sub(
+                r"refresh_token = .*", f'refresh_token = "{refresh_token}"', content
+            )
         else:
             content = content + f'\nrefresh_token = "{refresh_token}"\n'
         f.write(content)
 
     click.echo("Done! You can now run adsctl commands.")
-
 
 
 def get_authorization_code(passthrough_val):

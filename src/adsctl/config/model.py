@@ -1,5 +1,7 @@
-from pydantic import (AmqpDsn, BaseModel, BaseSettings, Field, PostgresDsn,
-                      PyObject, RedisDsn)
+from pydantic import (
+    BaseModel,
+    BaseSettings,
+)
 
 
 class OAuth(BaseModel):
@@ -15,4 +17,4 @@ class RootConfig(BaseSettings):
     oauth: OAuth = OAuth()
 
     class Config:
-        env_prefix = 'adsctl_'
+        env_prefix = "adsctl_"

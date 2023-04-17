@@ -1,4 +1,3 @@
-import proto
 from google.api_core import protobuf_helpers
 
 from adsctl.cli import utils
@@ -22,7 +21,6 @@ def mutate(client, customer_id, resource_name, budget):
     if first is None:
         print(f"Budget not found for campaign {resource_name}")
         return None
-    initial = first.campaign_budget
 
     # Update Object
     campaign_budget_service = client.get_service("CampaignBudgetService")

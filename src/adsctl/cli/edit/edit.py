@@ -21,7 +21,7 @@ def edit(obj, version, customer_id):
         )
         obj.client = googleads_client
         obj.customer_id = customer_id
-    except RefreshError as ex:
+    except RefreshError:
         click.echo(
             "Token has been expired or revoked. \nTry re-running the "
             "authentication command:\n\n    adsctl auth"

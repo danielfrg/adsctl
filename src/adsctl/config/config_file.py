@@ -26,13 +26,13 @@ class ConfigFile:
             content = tomli_w.dumps(self.model.dict())
 
         self.path.ensure_parent_dir_exists()
-        self.path.write_atomic(content, 'w', encoding='utf-8')
+        self.path.write_atomic(content, "w", encoding="utf-8")
 
     def load(self):
         self.model = RootConfig.parse_obj(load_toml_data(self.read()))
 
     def read(self) -> str:
-        return self.path.read_text('utf-8')
+        return self.path.read_text("utf-8")
 
     def restore(self):
         import tomli_w
@@ -51,4 +51,4 @@ class ConfigFile:
     def get_default_location(cls) -> Path:
         from platformdirs import user_config_dir
 
-        return Path(user_config_dir('adsctl', appauthor=False)) / 'config.toml'
+        return Path(user_config_dir("adsctl", appauthor=False)) / "config.toml"

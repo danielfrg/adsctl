@@ -1,5 +1,3 @@
-import os
-
 import pytest
 
 from adsctl import __about__ as ads_about

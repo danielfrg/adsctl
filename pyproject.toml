@@ -51,9 +51,18 @@ path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["test"]
-dependencies = ["black", "isort", "flake8", "pylint"]
+dependencies = ["black", "isort", "flake8", "pylint", "ruff"]
 
 [tool.hatch.envs.default.scripts]
+style = [
+  "ruff {args:.}",
+  "black --check --diff {args:.}",
+]
+fmt = [
+  "black {args:.}",
+  "ruff --fix {args:.}",
+  "style",
+]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
 no-cov = "cov --no-cov {args}"
 
