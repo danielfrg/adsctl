@@ -1,5 +1,3 @@
-import pytest
-
 import adsctl
 from adsctl import queries
 
@@ -28,4 +26,3 @@ def test_parse_2(customer_id):
     assert "campaign" in tables
     assert "metrics" in tables
     assert "campaignBudget" in tables
-

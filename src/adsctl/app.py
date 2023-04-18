@@ -1,7 +1,6 @@
 from typing import Optional
 
 from adsctl import client
-from adsctl.config import ConfigFile
 from adsctl.config.config_file import ConfigFile
 from adsctl.config.model import RootConfig
 from adsctl.parse import parseStream

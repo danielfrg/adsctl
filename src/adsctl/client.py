@@ -21,7 +21,6 @@ def get_client(config, version="v13"):
         sys.exit(1)
 
 
-
 def search_stream(query, client, customer_id):
     customer_id = customer_id.replace("-", "")
     ga_service = client.get_service("GoogleAdsService")

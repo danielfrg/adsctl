@@ -35,7 +35,7 @@ def prompt(client, customer_id, plain=False):
 
                 for table, df in tables.items():
                     click.echo(table)
-                    click.echo(tabulate(df, headers='keys', tablefmt='psql'))
+                    click.echo(tabulate(df, headers="keys", tablefmt="psql"))
 
             if count == 0:
                 click.echo("No results found")

@@ -2,7 +2,6 @@ import click
 
 from adsctl.__about__ import __version__
 from adsctl.cli.utils import create_app
-from adsctl.client import get_client as get_google_ads_client
 from adsctl.prompt.prompt import prompt
 
 
