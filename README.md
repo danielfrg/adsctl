@@ -24,6 +24,8 @@ Features:
   Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 - Centralized configuration
 - Automatically update refresh token
+- *(soon)* Multiple config files
+- Simple Python API with Pandas integration
 
 ## Installation
 
@@ -33,28 +35,37 @@ pip install adsctl
 
 ## Getting started
 
-Create the configuration file:
+Requirements:
+
+- A Google Ads Developer Token and OAuth2 credentials
+- See [Google Ads API Quickstart](https://developers.google.com/google-ads/api/docs/first-call/overview) for more details.
+
+This project manages it's own configuration files.
+To create the configuration file run:
 
 ```shell
 adsctl config
+
+# Open the location of the file
+adsctl config explore
 ```
 
-Open it and fill it with your credentials:
+Open it and fill it with your credentials: Dev Token, Client ID, Client Secret and Customer ID. Don't add the `refresh_token`.
 
-- Don't add the `refresh_token`
-
-Login and get a refresh token:
+To login and get a refresh token:
 
 ```shell
 adsctl auth <path-to-secret.json>
 ```
+
+The token is saved automatically in the configuration file.
 
 ## GAQL Prompt
 
 An interactive shell for executing GAQL queries against the Google Ads API.
 
 ```shell
-gaql
+$ gaql
 
 >>> SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id
 +----+-----------------------------+---------+-------------+
@@ -144,3 +155,10 @@ for batch in stream:
     for row in batch.results:
         ...
 ```
+
+## Disclaimer
+
+*This is not an official Google product*.
+
+This repository is maintained by a Googler but is not a supported Google product.
+Code and issues here are answered by maintainers and other community members on GitHub on a best-effort basis.
