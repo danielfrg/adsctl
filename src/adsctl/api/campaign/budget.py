@@ -15,7 +15,6 @@ def get_rn(campaign_id, app: Application):
 
     response = app.search(query)
     for row in response:
-        print(response)
         return row.campaign.campaign_budget
     return None
 
@@ -51,7 +50,7 @@ def mutate(resource_name, budget, app: Application):
 
     # Create a field mask using the updated campaign.
     field_mask = protobuf_helpers.field_mask(None, updated)
-    print(field_mask)
+
     # Copy the field mask onto the operation's update_mask field.
     client.copy_from(campaign_budget_operation.update_mask, field_mask)
 

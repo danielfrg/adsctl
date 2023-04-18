@@ -29,7 +29,7 @@ def prompt(client, customer_id, plain=False):
                 for batch in stream:
                     for row in batch.results:
                         count += 1
-                        print(row)
+                        click.echo(row)
             else:
                 tables = parseStream(stream)
 
