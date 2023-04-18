@@ -11,30 +11,59 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PYTHONUNBUFFERED: "1"
-  FORCE_COLOR: "1"
+  PYTHONUNBUFFERED: 1
+  FORCE_COLOR: 1
 
 jobs:
   run:
-    name: Python ${{ matrix.python-version }} on ${{ startsWith(matrix.os, 'macos-') && 'macOS' || startsWith(matrix.os, 'windows-') && 'Windows' || 'Linux' }}
-    runs-on: ${{ matrix.os }}
+    name: py ${{ matrix.python-version }}
+
     strategy:
       fail-fast: false
       matrix:
         # os: [ubuntu-latest, windows-latest, macos-latest]
-        os: [ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.10", "3.11"]
+
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+      - uses: arduino/setup-task@v1
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
+      - uses: actions/cache@v3
+        id: cached-python-env
+        with:
+          path: ${{ env.pythonLocation }}
+          key: >
+            python-test
+            ${{ runner.os }}
+            python-${{ matrix.python-version }}
+            ${{ hashFiles('pyproject.toml') }}
+            ${{ hashFiles('requirements/*') }}
+
+      - name: Install dependencies
+        if: steps.cached-python-env.outputs.cache-hit != 'true'
+        run: |
+          pip install -r requirements/pyproject.txt
+
       - name: Install Hatch
         run: pip install --upgrade hatch
+
+      - name: Print Python info
+        run: |
+          which python
+          python --version
+          which pip
+          pip --version
+          pip freeze
+
+      - name: Build Python package
+        run: task build
 
       - name: Run tests
         run: hatch run cov
