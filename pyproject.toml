@@ -50,7 +50,7 @@ path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["test"]
-dependencies = ["black", "isort", "pip-tools", "ruff"]
+dependencies = ["black", "isort", "mypy", "pip-tools", "ruff"]
 
 [tool.hatch.envs.default.scripts]
 check-style = ["ruff {args:.}", "black --check --diff {args:.}"]
@@ -88,3 +88,6 @@ select = [
 
 [tool.isort]
 profile = "black"
+
+[tool.mypy]
+strict = true
