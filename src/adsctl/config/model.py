@@ -17,8 +17,10 @@ class RootConfig(BaseSettings):
         env_prefix = "adsctl_"
 
     def clientSettings(self):
+        print(self.login_customer_id)
         return {
             "developer_token": self.developer_token,
+            "login_customer_id": self.login_customer_id,
             "client_id": self.oauth.client_id,
             "client_secret": self.oauth.client_secret,
             "refresh_token": self.oauth.refresh_token,

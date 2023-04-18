@@ -1,10 +1,29 @@
 from google.api_core import protobuf_helpers
 
+from adsctl.app import Application
 from adsctl.cli import utils
 
 
-def mutate(client, customer_id, resource_name, budget):
+def get_rn(campaign_id, app: Application):
+    """Get the budget Resource Name for a campaign."""
+
+    query = f"""
+        SELECT campaign.id, campaign.campaign_budget
+        FROM campaign
+        WHERE campaign.id = {campaign_id}
+    """
+
+    response = app.search(query)
+    for row in response:
+        print(response)
+        return row.campaign.campaign_budget
+    return None
+
+
+def mutate(resource_name, budget, app: Application):
     """Set campaign budget."""
+
+    client = app.client
 
     # Retrieve Object
     query = f"""
@@ -13,7 +32,7 @@ def mutate(client, customer_id, resource_name, budget):
     WHERE campaign_budget.resource_name = "{resource_name}"
     """
 
-    response = utils.gaql_query(client, customer_id, query)
+    response = app.search_stream(query)
     first = utils.get_first_row(response)
 
     if first is None:
@@ -31,28 +50,13 @@ def mutate(client, customer_id, resource_name, budget):
     updated.amount_micros = int(budget * 1000000)
 
     # Create a field mask using the updated campaign.
-    field_mask = protobuf_helpers.field_mask(None, updated._pb)
+    field_mask = protobuf_helpers.field_mask(None, updated)
     print(field_mask)
     # Copy the field mask onto the operation's update_mask field.
     client.copy_from(campaign_budget_operation.update_mask, field_mask)
 
     response = campaign_budget_service.mutate_campaign_budgets(
-        customer_id=customer_id, operations=[campaign_budget_operation]
+        customer_id=app.customer_id, operations=[campaign_budget_operation]
     )
 
     return response
-
-
-def get_rn(client, customer_id, campaign_id):
-    """Get the budget ID for a campaign."""
-
-    query = f"""
-        SELECT campaign.id, campaign.campaign_budget
-        FROM campaign
-        WHERE campaign.id = {campaign_id}
-    """
-
-    response = utils.gaql_query(client, customer_id, query)
-    for row in response:
-        return row.campaign.campaign_budget
-    return None

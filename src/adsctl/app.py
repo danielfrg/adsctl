@@ -10,6 +10,7 @@ class Application:
     config_file: ConfigFile
     client = None
     _customer_id: Optional[str]
+    params: dict = {}
 
     def __init__(self, config_file=None, customer_id=None, create_client=True):
         self.config_file = config_file or ConfigFile()
@@ -38,13 +39,18 @@ class Application:
             gads_config = self.config_file.model.clientSettings()
             self.client = client.get_client(gads_config)
 
-    def search_stream(self, query):
-        customer_id = self.config_file.model.customer_id
-        stream = client.search_stream(query, self.client, customer_id)
+    def search(self, query, customer_id=None):
+        customer_id = customer_id or self.config_file.model.customer_id
+        stream = client.search(query.strip(), self.client, customer_id)
         return stream
 
-    def query(self, query):
-        stream = self.search_stream(query)
+    def search_stream(self, query, customer_id=None):
+        customer_id = customer_id or self.config_file.model.customer_id
+        stream = client.search_stream(query.strip(), self.client, customer_id)
+        return stream
+
+    def query(self, query, customer_id=None):
+        stream = self.search_stream(query, customer_id=customer_id)
         tables = parseStream(stream)
         return tables
 
