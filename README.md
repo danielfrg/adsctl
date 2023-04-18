@@ -1,7 +1,20 @@
-# Google Ads Control CLI and Prompt
+# Google Ads API CLI and Prompt
 
-[![PyPI - Version](https://img.shields.io/pypi/v/adsctl.svg)](https://pypi.org/project/adsctl)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/adsctl.svg)](https://pypi.org/project/adsctl)
+<p align="center">
+    <a href="https://pypi.org/project/adsctl/">
+        <img src="https://img.shields.io/pypi/v/adsctl.svg">
+    </a>
+    <a href="https://pypi.org/project/mkdocs-jupyter">
+        <img src="https://img.shields.io/pypi/pyversions/adsctl.svg">
+    </a>
+    <a href="https://github.com/danielfrg/adsctl/actions/workflows/test.yml">
+        <img src="https://github.com/danielfrg/adsctl/workflows/test/badge.svg">
+    </a>
+    </a>
+    <a href="https://github.com/danielfrg/adsctl/blob/main/LICENSE.txt">
+        <img src="https://img.shields.io/:license-Apache%202-blue.svg">
+    </a>
+</p>
 
 Features:
 
