@@ -2,15 +2,13 @@
 name = "adsctl"
 description = "Google Ads Control CLI and Prompt"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = "Apache-2.0"
 keywords = []
 authors = [{ name = "Daniel Rodriguez", email = "daniel@danielfrg.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: Implementation :: CPython",
@@ -52,10 +50,10 @@ path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["test"]
-dependencies = ["black", "isort", "flake8", "pylint", "ruff"]
+dependencies = ["black", "isort", "flake8", "pip-tools", "pylint", "ruff"]
 
 [tool.hatch.envs.default.scripts]
-style = [
+check-style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",
 ]
@@ -64,22 +62,27 @@ fmt = [
   "ruff --fix {args:.}",
   "style",
 ]
+test = "cov --no-cov {args}"
+test-adsapi = "cov --no-cov --ads-api {args}"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
-no-cov = "cov --no-cov {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["37", "38", "39", "310", "311"]
+python = [ "3.10", "3.11"]
 
 [tool.pytest.ini_options]
-addopts = ["-s", "-vv"]
 testpaths = ["tests"]
+addopts = ["-s", "-vv"]
+markers = [
+    "pkg: marks tests as Packaging tests",
+    "adsapi: mark test that require connection to the API",
+]
 xfail_strict = true
 filterwarnings = ["ignore::DeprecationWarning"]
 
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = ["src/adsctl/__about__.py"]
+omit = ["tests/*"]
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
