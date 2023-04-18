@@ -6,10 +6,6 @@ import sys
 from urllib.parse import unquote
 
 import click
-
-# If using Web flow, the redirect URL must match exactly what’s configured in GCP for
-# the OAuth client.  If using Desktop flow, the redirect must be a localhost URL and
-# is not explicitly set in GCP.
 from google_auth_oauthlib.flow import Flow
 
 _SCOPE = "https://www.googleapis.com/auth/adwords"

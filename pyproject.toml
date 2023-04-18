@@ -52,7 +52,7 @@ path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["test"]
-dependencies = ["black", "isort", "flake8", "pylint", "ruff"]
+dependencies = ["black", "isort", "flake8", "pip-tools", "pylint", "ruff"]
 
 [tool.hatch.envs.default.scripts]
 style = [
@@ -64,15 +64,20 @@ fmt = [
   "ruff --fix {args:.}",
   "style",
 ]
+test = "cov --no-cov {args}"
+test-adsapi = "cov --no-cov --ads-api {args}"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
-no-cov = "cov --no-cov {args}"
 
 [[tool.hatch.envs.test.matrix]]
-python = ["37", "38", "39", "310", "311"]
+python = ["38", "39", "310", "311"]
 
 [tool.pytest.ini_options]
-addopts = ["-s", "-vv"]
 testpaths = ["tests"]
+addopts = ["-s", "-vv"]
+markers = [
+    "pkg: marks tests as Packaging tests",
+    "adsapi: mark test that require connection to the API",
+]
 xfail_strict = true
 filterwarnings = ["ignore::DeprecationWarning"]
 
