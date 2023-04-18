@@ -34,7 +34,8 @@ def create_app(
             sys.exit(0)
         except OSError:  # no cov
             click.echo(
-                f"Unable to create config file located at `{str(app.config_file.path)}`. Please check your permissions.",
+                f"Unable to create config file located at"
+                f"`{str(app.config_file.path)}`. Please check your permissions.",
                 err=True,
             )
 

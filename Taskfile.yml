@@ -13,20 +13,19 @@ tasks:
     cmds:
       - hatch run test-adsapi
 
-  check:
-    ignore_error: true
-    cmds:
-      - isort . --check-only --diff
-      - black . --check
-      - ruff check src/adsctl
-      - flake8
-
   fmt:
     ignore_error: true
     cmds:
-      - isort .
-      - black .
-      - ruff check --fix src/adsctl
+      - ruff --fix src
+      - black src
+      - isort src
+
+  check:
+    ignore_error: true
+    cmds:
+      - ruff src/adsctl
+      - black src --check
+      - isort src --check-only
 
   lockfiles:
     cmds:

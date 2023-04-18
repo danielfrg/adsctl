@@ -13,7 +13,9 @@ charset-normalizer==3.1.0
 click==8.1.3
     # via adsctl (pyproject.toml)
 coverage[toml]==7.2.3
-    # via pytest-cov
+    # via
+    #   adsctl (pyproject.toml)
+    #   pytest-cov
 exceptiongroup==1.1.1
     # via pytest
 google-ads==21.0.0

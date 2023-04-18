@@ -4,7 +4,7 @@ description = "Google Ads Control CLI and Prompt"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
-keywords = []
+keywords = ["google ads", "google ads api", "cli", "prompt"]
 authors = [{ name = "Daniel Rodriguez", email = "daniel@danielfrg.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -32,7 +32,7 @@ Issues = "https://github.com/danielfrg/adsctl/issues"
 Source = "https://github.com/danielfrg/adsctl"
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-cov"]
+test = ["coverage[toml]", "pytest", "pytest-cov"]
 
 [project.scripts]
 gaql = "adsctl.prompt.cli:main"
@@ -50,31 +50,21 @@ path = "src/adsctl/__about__.py"
 
 [tool.hatch.envs.default]
 features = ["test"]
-dependencies = ["black", "isort", "flake8", "pip-tools", "pylint", "ruff"]
+dependencies = ["black", "isort", "pip-tools", "ruff"]
 
 [tool.hatch.envs.default.scripts]
-check-style = [
-  "ruff {args:.}",
-  "black --check --diff {args:.}",
-]
-fmt = [
-  "black {args:.}",
-  "ruff --fix {args:.}",
-  "style",
-]
+check-style = ["ruff {args:.}", "black --check --diff {args:.}"]
+fmt = ["black {args:.}", "ruff --fix {args:.}", "style"]
 test = "cov --no-cov {args}"
 test-adsapi = "cov --no-cov --ads-api {args}"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
 
-[[tool.hatch.envs.test.matrix]]
-python = [ "3.10", "3.11"]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = ["-s", "-vv"]
+addopts = ["-s", "-vv", "--strict-config", "--strict-markers"]
 markers = [
-    "pkg: marks tests as Packaging tests",
-    "adsapi: mark test that require connection to the API",
+  "pkg: marks tests as Packaging tests",
+  "adsapi: mark test that require connection to the API",
 ]
 xfail_strict = true
 filterwarnings = ["ignore::DeprecationWarning"]
@@ -86,3 +76,15 @@ omit = ["tests/*"]
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+
+[tool.ruff]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    # "I",  # isort
+    "B",  # flake8-bugbear
+]
+
+[tool.isort]
+profile = "black"
