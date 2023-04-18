@@ -1,7 +1,4 @@
-from pydantic import (
-    BaseModel,
-    BaseSettings,
-)
+from pydantic import BaseModel, BaseSettings
 
 
 class OAuth(BaseModel):
@@ -18,3 +15,12 @@ class RootConfig(BaseSettings):
 
     class Config:
         env_prefix = "adsctl_"
+
+    def clientSettings(self):
+        return {
+            "developer_token": self.developer_token,
+            "client_id": self.oauth.client_id,
+            "client_secret": self.oauth.client_secret,
+            "refresh_token": self.oauth.refresh_token,
+            "use_proto_plus": False,
+        }

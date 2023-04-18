@@ -16,8 +16,6 @@ def mutate(client, customer_id, resource_name, budget):
     response = utils.gaql_query(client, customer_id, query)
     first = utils.get_first_row(response)
 
-    print(first)
-
     if first is None:
         print(f"Budget not found for campaign {resource_name}")
         return None

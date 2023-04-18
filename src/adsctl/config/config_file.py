@@ -5,6 +5,8 @@ from adsctl.utils.fs import Path, load_toml_data
 
 
 class ConfigFile:
+    model: RootConfig
+
     def __init__(self, path: Optional[Path] = None):
         self._path: Optional[Path] = path
         self.model = cast(RootConfig, None)

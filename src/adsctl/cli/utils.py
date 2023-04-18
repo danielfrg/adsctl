@@ -3,14 +3,18 @@ from typing import Optional
 
 import click
 
-from adsctl.cli.app import Application
+from adsctl.app import Application
 from adsctl.config.config_file import ConfigFile
 from adsctl.utils.fs import Path
 
 
-def load_config(config_file_path: Optional[str] = None) -> Application:
+def create_app(
+    config_file_path: Optional[str] = None, customer_id: Optional[str] = None
+) -> Application:
     used_config_file = Path()
-    app = Application(config_file=ConfigFile())
+    app = Application(
+        config_file=ConfigFile(), customer_id=customer_id, create_client=False
+    )
 
     if config_file_path:
         used_config_file = Path(config_file_path).resolve()
@@ -35,11 +39,6 @@ def load_config(config_file_path: Optional[str] = None) -> Application:
             )
 
     return app
-
-
-def gaql_query(client, customer_id, query):
-    ga_service = client.get_service("GoogleAdsService")
-    return ga_service.search(customer_id=customer_id, query=query)
 
 
 def get_first_row(response):

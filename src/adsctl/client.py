@@ -19,3 +19,10 @@ def get_client(config, version="v13"):
                 for field_path_element in error.location.field_path_elements:
                     print(f"\t\tOn field: {field_path_element.field_name}")
         sys.exit(1)
+
+
+
+def search_stream(query, client, customer_id):
+    customer_id = customer_id.replace("-", "")
+    ga_service = client.get_service("GoogleAdsService")
+    return ga_service.search_stream(customer_id=customer_id, query=query)
