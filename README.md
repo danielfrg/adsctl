@@ -24,7 +24,7 @@ Features:
   Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 - Centralized configuration
 - Automatically update refresh token
-- *(soon)* Multiple config files
+- _(soon)_ Multiple config files
 - Simple Python API with Pandas integration
 
 ## Installation
@@ -77,14 +77,22 @@ $ gaql
 +----+-----------------------------+---------+-------------+
 ```
 
-You can also control the output format with the `-o` flag:
+By default adsctl prints it in "table" format but you can control the output
+format with the `-o` flag:
 
 ```shell
 # Will print the protobuf response
 $ gaql -o plain
+
+# Print a CSV response
+$ gaql -o csv
 ```
 
-You can also use it a
+You can also run a single commands and save it to a file in the specified format:
+
+```shell
+$ gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv > my-query.csv
+```
 
 ## CLI
 
@@ -166,7 +174,7 @@ for batch in stream:
 
 ## Disclaimer
 
-*This is not an official Google product*.
+_This is not an official Google product_.
 
 This repository is maintained by a Googler but is not a supported Google product.
 Code and issues here are answered by maintainers and other community members on GitHub on a best-effort basis.

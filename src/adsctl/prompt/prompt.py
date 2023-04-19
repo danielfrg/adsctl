@@ -8,8 +8,7 @@ from tabulate import tabulate
 from adsctl.parse import parseStream
 
 
-def prompt(client, customer_id, output="table"):
-    ga_service = client.get_service("GoogleAdsService")
+def prompt_loop(ga_service, customer_id, output="table"):
     session = PromptSession()
 
     while True:
@@ -22,28 +21,12 @@ def prompt(client, customer_id, output="table"):
             if query == "exit":
                 sys.exit(0)
 
-            stream = ga_service.search_stream(customer_id=customer_id, query=query)
+            results = make_query(ga_service, customer_id, query, output=output)
 
-            if output == "plain":
-                count = 0
-                for batch in stream:
-                    for row in batch.results:
-                        count += 1
-                        click.echo(row)
-                if count == 0:
-                    click.echo("No results found")
-            else:
-                use_pandas = output == "table"
-                tables = parseStream(stream, pandas=use_pandas)
+            if results is None:
+                continue
 
-                for table, df in tables.items():
-                    click.echo(f"Table: {table}")
-                    if use_pandas:
-                        if len(df) == 0:
-                            click.echo("No results found")
-                        click.echo(tabulate(df, headers="keys", tablefmt="psql"))
-                    else:
-                        click.echo(df)
+            print_results(results, output=output)
 
         except GoogleAdsException as ex:
             # Continue on query errors
@@ -53,3 +36,42 @@ def prompt(client, customer_id, output="table"):
         except EOFError:
             # Control-D pressed
             sys.exit()
+
+
+def make_query(ga_service, customer_id, query, output="table") -> None | list | dict:
+    stream = ga_service.search_stream(customer_id=customer_id, query=query)
+
+    results = None
+
+    if output == "plain":
+        results = []
+        for batch in stream:
+            for row in batch.results:
+                results.append(row)
+    elif output in ("table", "csv"):
+        results = {}
+        tables = parseStream(stream, pandas=True)
+
+        for table, df in tables.items():
+            results[table] = df
+
+    return results
+
+
+def print_results(results, output="table"):
+    if output == "plain":
+        if len(results) == 0:
+            click.echo("No results found")
+        for row in results:
+            click.echo(row)
+    elif output == "table":
+        for table, df in results.items():
+            click.echo(f"Table: {table}")
+            if len(df) == 0:
+                click.echo("No results found")
+            else:
+                click.echo(tabulate(df, headers="keys", tablefmt="psql"))
+    elif output == "csv":
+        for _, df in results.items():
+            if len(df) > 0:
+                click.echo(df.to_csv(index=False))
