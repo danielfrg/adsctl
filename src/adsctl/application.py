@@ -1,5 +1,7 @@
 from typing import Optional
 
+from google.ads.googleads.client import GoogleAdsClient
+
 from adsctl import client
 from adsctl.config.config_file import ConfigFile
 from adsctl.config.model import RootConfig
@@ -8,7 +10,7 @@ from adsctl.parse import parseStream
 
 class Application:
     config_file: ConfigFile
-    client = None
+    client: GoogleAdsClient | None
     _customer_id: Optional[str]
     params: dict = {}
 
@@ -17,6 +19,7 @@ class Application:
         self.config_file.load()
         self._customer_id = customer_id or self.config_file.model.customer_id
 
+        self.client = None
         if create_client:
             self.create_client()
 
@@ -56,4 +59,5 @@ class Application:
 
 
 # Alias
+GoogleAds = Application
 GoogleAds = Application

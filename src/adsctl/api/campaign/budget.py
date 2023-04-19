@@ -1,7 +1,6 @@
 from google.api_core import protobuf_helpers
 
-from adsctl.app import Application
-from adsctl.cli import utils
+from adsctl.application import Application
 
 
 def get_rn(campaign_id, app: Application):
@@ -19,35 +18,20 @@ def get_rn(campaign_id, app: Application):
     return None
 
 
-def mutate(resource_name, budget, app: Application):
+def mutate(budget, rn: str, app: Application):
     """Set campaign budget."""
-
     client = app.client
 
-    # Retrieve Object
-    query = f"""
-    SELECT campaign_budget.amount_micros, campaign_budget.resource_name
-    FROM campaign_budget
-    WHERE campaign_budget.resource_name = "{resource_name}"
-    """
-
-    response = app.search_stream(query)
-    first = utils.get_first_row(response)
-
-    if first is None:
-        print(f"Budget not found for campaign {resource_name}")
-        return None
-
-    # Update Object
     campaign_budget_service = client.get_service("CampaignBudgetService")
     campaign_budget_operation = client.get_type("CampaignBudgetOperation")
 
     updated = campaign_budget_operation.update
-    updated.resource_name = resource_name
+    updated.resource_name = rn
 
     # Changes
     updated.amount_micros = int(budget * 1000000)
 
+    # Boilerplate:
     # Create a field mask using the updated campaign.
     field_mask = protobuf_helpers.field_mask(None, updated)
 

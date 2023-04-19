@@ -3,7 +3,7 @@ from typing import Optional
 
 import click
 
-from adsctl.app import Application
+from adsctl.application import Application
 from adsctl.config.config_file import ConfigFile
 from adsctl.utils.fs import Path
 

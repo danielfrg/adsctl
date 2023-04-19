@@ -5,7 +5,7 @@ import click
 from adsctl.__about__ import __version__
 from adsctl.cli.auth import auth
 from adsctl.cli.config import config
-from adsctl.cli.edit.edit import edit
+from adsctl.cli.edit.main import edit
 from adsctl.cli.utils import create_app
 
 
