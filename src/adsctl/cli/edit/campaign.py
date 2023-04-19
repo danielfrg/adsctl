@@ -47,5 +47,5 @@ def budget_(obj: Application, budget):
         click.echo(f"Budget not found for campaign {campaign_id}")
         sys.exit(1)
 
-    r = budget_api.mutate(budget, rn=budget_rn, app=obj)
+    r = budget_api.mutate(budget, resource_name=budget_rn, app=obj)
     click.echo(f"Budget updated: {r.results[0].resource_name}")

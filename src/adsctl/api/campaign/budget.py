@@ -17,7 +17,7 @@ def get_rn(campaign_id, app: Application):
     return None
 
 
-def mutate(budget, rn: str, app: Application):
+def mutate(budget, resource_name: str, app: Application):
     """Set campaign budget."""
     client = app.client
 
@@ -25,7 +25,7 @@ def mutate(budget, rn: str, app: Application):
     campaign_budget_operation = client.get_type("CampaignBudgetOperation")
 
     updated = campaign_budget_operation.update
-    updated.resource_name = rn
+    updated.resource_name = resource_name
 
     # Changes
     updated.amount_micros = int(budget * 1000000)
