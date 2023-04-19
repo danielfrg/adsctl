@@ -1,7 +1,12 @@
 from google.ads.googleads.client import GoogleAdsClient
-from google.api_core import protobuf_helpers
 
+from adsctl.api.utils import mask_operation
 from adsctl.application import Application
+
+
+def get_rn(campaign_id, app: Application) -> str:
+    campaign_service = app.client.get_service("CampaignService")
+    return campaign_service.campaign_path(app.customer_id, campaign_id)
 
 
 def mutate(status, campaign_id, app: Application):
@@ -10,7 +15,7 @@ def mutate(status, campaign_id, app: Application):
     campaign_service = client.get_service("CampaignService")
     campaign_operation = client.get_type("CampaignOperation")
 
-    resource_name = campaign_service.campaign_path(app.customer_id, campaign_id)
+    resource_name = get_rn(campaign_id, app)
 
     updated = campaign_operation.update
     updated.resource_name = resource_name
@@ -22,11 +27,7 @@ def mutate(status, campaign_id, app: Application):
 
     updated.status = enum
 
-    # Create a field mask using the updated campaign.
-    field_mask = protobuf_helpers.field_mask(None, updated)
-
-    # Copy the field mask onto the operation's update_mask field.
-    client.copy_from(campaign_operation.update_mask, field_mask)
+    mask_operation(campaign_operation, updated, client)
 
     response = campaign_service.mutate_campaigns(
         customer_id=app.customer_id, operations=[campaign_operation]

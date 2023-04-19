@@ -26,6 +26,8 @@ Features:
 - Automatically update refresh token
 - Simple Python API with Pandas integration
 
+Google Ads Interface for humans.
+
 ## Installation
 
 ```shell
@@ -111,10 +113,17 @@ campaign.csv
 
 ### Campaign Management
 
+#### Status management
+
+```shell
+adsctl campaign -i <campaign-id> status enabled
+adsctl campaign -i <campaign-id> status paused
+```
+
 #### Update budget
 
 ```shell
-adsctl -c <customer-id> campaign -i <campaign-id> budget <amount>
+adsctl campaign -i <campaign-id> budget <amount>
 ```
 
 ### Config

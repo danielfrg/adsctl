@@ -1,5 +1,4 @@
-from google.api_core import protobuf_helpers
-
+from adsctl.api.utils import mask_operation
 from adsctl.application import Application
 
 
@@ -32,11 +31,7 @@ def mutate(budget, rn: str, app: Application):
     updated.amount_micros = int(budget * 1000000)
 
     # Boilerplate:
-    # Create a field mask using the updated campaign.
-    field_mask = protobuf_helpers.field_mask(None, updated)
-
-    # Copy the field mask onto the operation's update_mask field.
-    client.copy_from(campaign_budget_operation.update_mask, field_mask)
+    mask_operation(campaign_budget_operation, updated, client)
 
     response = campaign_budget_service.mutate_campaign_budgets(
         customer_id=app.customer_id, operations=[campaign_budget_operation]
