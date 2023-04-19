@@ -18,15 +18,18 @@ from adsctl.prompt.prompt import make_query, print_results, prompt_loop
     "--output",
     "-o",
     default="table",
-    type=click.Choice(["table", "plain", "csv"], case_sensitive=False),
+    type=click.Choice(["table", "plain", "csv", "csv-files"], case_sensitive=False),
 )
 @click.option(
     "--command",
     "-c",
 )
+@click.option("--filename", "-f", "input_file", type=click.File("rb"))
 @click.version_option(version=__version__, prog_name="AdsCTL")
 @click.pass_context
-def main(ctx: click.Context, config_file_path, customer_id_opt, output, command):
+def main(
+    ctx: click.Context, config_file_path, customer_id_opt, output, command, input_file
+):
     """Interactive GAQL prompt."""
 
     app = create_app(config_file_path, customer_id=customer_id_opt)
@@ -37,9 +40,17 @@ def main(ctx: click.Context, config_file_path, customer_id_opt, output, command)
     ctx.obj = app
     ga_service = app.client.get_service("GoogleAdsService")
 
-    if command:
+    if command or input_file:
+        if input_file is not None:
+            command = input_file.read()
+
         results = make_query(ga_service, app.customer_id, command, output=output)
-        print_results(results, output=output)
+        if output == "csv-files":
+            for table, df in results.items():
+                fname = f"{table}.csv"
+                df.to_csv(fname, index=False)
+        else:
+            print_results(results, output=output)
     else:
         prompt_loop(ga_service, app.customer_id, output=output)
 

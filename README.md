@@ -18,13 +18,12 @@
 
 Features:
 
-- Command line tool for managing Google Ads accounts.
-  Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for Google Ads.
 - A command line tool for executing GAQL queries against the Google Ads API.
   Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
-- Centralized configuration
+- A command line tool for managing Google Ads resources.
+  Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for the Google Ads API.
+- Centralized configuration with _(soon)_ multiple config file management
 - Automatically update refresh token
-- _(soon)_ Multiple config files
 - Simple Python API with Pandas integration
 
 ## Installation
@@ -37,7 +36,7 @@ pip install adsctl
 
 Requirements:
 
-- A Google Ads Developer Token and OAuth2 credentials
+- All the requirements to use the Google Ads API including Ads Developer Token and OAuth2 credentials
 - See [Google Ads API Quickstart](https://developers.google.com/google-ads/api/docs/first-call/overview) for more details.
 
 This project manages it's own configuration files.
@@ -46,11 +45,13 @@ To create the configuration file run:
 ```shell
 adsctl config
 
-# Open the location of the file
+# Open the location of the config files
 adsctl config explore
 ```
 
-Open it and fill it with your credentials: Dev Token, Client ID, Client Secret and Customer ID. Don't add the `refresh_token`.
+Open the generated config file and fill it with your credentials:
+Dev Token, Client ID, Client Secret and Customer ID.
+Don't add the `refresh_token`.
 
 To login and get a refresh token:
 
@@ -81,17 +82,29 @@ By default adsctl prints it in "table" format but you can control the output
 format with the `-o` flag:
 
 ```shell
-# Will print the protobuf response
+# Print the plain protobuf response
 $ gaql -o plain
 
 # Print a CSV response
 $ gaql -o csv
 ```
 
-You can also run a single commands and save it to a file in the specified format:
+You can also run a single commands and save the output to a file in the specified format:
 
 ```shell
 $ gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv > my-query.csv
+```
+
+This assumes only table is returned but in more complex queries that include other
+resources or when using metrics or segments multiple tables are created.
+On those cases use the -o csv-files flag to save each table to a different file
+based on the table name.
+
+```shell
+$ gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv-files
+
+$ ls
+campaign.csv
 ```
 
 ## CLI

@@ -48,7 +48,7 @@ def make_query(ga_service, customer_id, query, output="table") -> None | list | 
         for batch in stream:
             for row in batch.results:
                 results.append(row)
-    elif output in ("table", "csv"):
+    elif output in ("table", "csv", "csv-files"):
         results = {}
         tables = parseStream(stream, pandas=True)
 
