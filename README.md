@@ -75,8 +75,16 @@ $ gaql
 |  1 | customers/XXX/campaigns/YYY | name2   | 10000000000 |
 |  2 | customers/XXX/campaigns/YYY | name3   | 10000000000 |
 +----+-----------------------------+---------+-------------+
-
 ```
+
+You can also control the output format with the `-o` flag:
+
+```shell
+# Will print the protobuf response
+$ gaql -o plain
+```
+
+You can also use it a
 
 ## CLI
 
