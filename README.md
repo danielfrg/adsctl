@@ -16,17 +16,17 @@
     </a>
 </p>
 
+Google Ads Interface for humans.
+
 Features:
 
 - A command line tool for executing GAQL queries against the Google Ads API.
   Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 - A command line tool for managing Google Ads resources.
   Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for the Google Ads API.
-- Centralized configuration with _(soon)_ multiple config file management
+- Centralized configuration with _(soon)_ multiple config/account file management
 - Automatically update refresh token
-- Simple Python API with Pandas integration
-
-Google Ads Interface for humans.
+- Python API with Pandas integration
 
 ## Installation
 
@@ -38,8 +38,10 @@ pip install adsctl
 
 Requirements:
 
-- All the requirements to use the Google Ads API including Ads Developer Token and OAuth2 credentials
+- All the requirements to use the Google Ads API including a Developer Token and OAuth2 credentials
 - See [Google Ads API Quickstart](https://developers.google.com/google-ads/api/docs/first-call/overview) for more details.
+
+### Configuration
 
 This project manages it's own configuration files.
 To create the configuration file run:
@@ -63,6 +65,13 @@ adsctl auth <path-to-secret.json>
 
 The token is saved automatically in the configuration file.
 
+Other commands:
+
+```shell
+# View config
+adsctl config show
+```
+
 ## GAQL Prompt
 
 An interactive shell for executing GAQL queries against the Google Ads API.
@@ -80,14 +89,14 @@ $ gaql
 +----+-----------------------------+---------+-------------+
 ```
 
-By default adsctl prints it in "table" format but you can control the output
+By default it uses the it in `table` format but you can control the output
 format with the `-o` flag:
 
 ```shell
 # Print the plain protobuf response
 $ gaql -o plain
 
-# Print a CSV response
+# Print a CSV contents
 $ gaql -o csv
 ```
 
@@ -126,13 +135,7 @@ adsctl campaign -i <campaign-id> status paused
 adsctl campaign -i <campaign-id> budget <amount>
 ```
 
-### Config
-
-```shell
-adsctl config show
-```
-
-## Programmatic API
+## Python API
 
 You can also use the Python API to easily execute GAQL queries
 and get the results as a Python dict or pandas DataFrame.
@@ -140,7 +143,7 @@ and get the results as a Python dict or pandas DataFrame.
 ```python
 import adsctl as ads
 
-# Read config file and create client
+# Read config file and creates the Google Ads client
 google_ads = ads.GoogleAds()
 
 # Execute GAQL query
@@ -184,10 +187,15 @@ campaignBudget
 0  customers/XXXXXXXXXX/campaignBudgets/ZZZZZZZZZZZ      1000000
 ```
 
-Or just directly make a `search_stream` request:
+Or directly make a `search` or `search_stream` request:
 
 ```python
-stream = app.search_stream(query)
+results = google_ads.search(query)
+...
+
+# ----
+
+stream = google_ads.search_stream(query)
 
 for batch in stream:
     for row in batch.results:
