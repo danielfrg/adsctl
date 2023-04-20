@@ -2,6 +2,7 @@ import sys
 
 import click
 
+from adsctl.application import Application
 from adsctl.config.config_file import ConfigFile
 
 
@@ -13,13 +14,11 @@ def config(app):
 
 @config.command()
 @click.pass_obj
-def init(app):
+def init(app: Application):
     """Create a base config file"""
     # TODO: Add force flag to overwrite existing config file
 
     if not app.config_file.path.is_file():
-        click.echo("Config file not found. Creating one with default settings now...")
-
         try:
             app.config_file.restore()
             click.echo(f"Default config file created at: {app.config_file.path}")

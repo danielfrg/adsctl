@@ -38,7 +38,7 @@ def auth(app: Application, secrets_file):
         sys.exit(1)
 
     click.echo(f"Your new refresh token is: {new_refresh_token}\n")
-    click.echo("Updating config file to include refresh token")
+    click.echo("Updating config file to include refresh token.")
 
     with open(app.config_file.path, "r") as f:
         current_contents = f.read()

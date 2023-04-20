@@ -30,7 +30,7 @@ class ConfigFile:
         import tomli_w
 
         if not content:
-            content = tomli_w.dumps(self.model.dict())
+            content = tomli_w.dumps(self.model.dict(exclude_none=True))
 
         self.path.ensure_parent_dir_exists()
         self.path.write_atomic(content, "w", encoding="utf-8")
@@ -46,7 +46,7 @@ class ConfigFile:
 
         config = RootConfig()
 
-        content = tomli_w.dumps(config.dict())
+        content = tomli_w.dumps(config.dict(exclude_none=True))
         self.save(content)
 
         self.model = config

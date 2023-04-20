@@ -14,5 +14,3 @@ def edit(app: Application):
 
 
 edit.add_command(campaign)
-
-edit.add_command(campaign)

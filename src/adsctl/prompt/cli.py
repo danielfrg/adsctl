@@ -30,11 +30,11 @@ from adsctl.prompt.prompt import make_query, print_results, prompt_loop
 def main(
     ctx: click.Context, config_file_path, customer_id_opt, output, command, input_file
 ):
-    """Interactive GAQL prompt."""
+    """Interactive GAQL prompt"""
 
     app = create_app(config_file_path, customer_id=customer_id_opt)
-    # click.echo(f"Using config: {app.config_file.path}")
 
+    app.load_config()
     app.create_client()
 
     ctx.obj = app

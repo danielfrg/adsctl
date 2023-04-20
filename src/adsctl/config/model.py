@@ -14,14 +14,18 @@ class AccountConfig(BaseModel):
     oauth: OAuth = OAuth()
 
     def clientSettings(self):
-        return {
+        base = {
             "developer_token": self.developer_token,
-            "login_customer_id": self.login_customer_id,
             "client_id": self.oauth.client_id,
             "client_secret": self.oauth.client_secret,
             "refresh_token": self.oauth.refresh_token,
             "use_proto_plus": False,
         }
+
+        login_customer_id = self.login_customer_id.replace("-", "")
+        if login_customer_id:
+            base["login_customer_id"] = (login_customer_id,)
+        return base
 
 
 class RootConfig(BaseSettings):

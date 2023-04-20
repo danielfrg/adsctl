@@ -21,7 +21,7 @@ def campaign(obj, campaign_id):
 def status(obj: Application, status):
     """Set campaign budget."""
     obj.create_client()
-
+    print(obj.account)
     campaign_id = obj.params["campaign_id"]
     campaign_rn = campaign_api.get_rn(campaign_id, app=obj)
 

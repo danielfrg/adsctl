@@ -32,16 +32,16 @@ class Application:
         return self.config_file.model
 
     @property
+    def account(self) -> AccountConfig:
+        return self.config_file.account
+
+    @property
     def customer_id(self) -> str | None:
         if self._customer_id is not None:
             return self._customer_id.replace("-", "")
 
-    @property
-    def account(self) -> AccountConfig:
-        return self.config_file.account
-
     @customer_id.setter
-    def customer_id_set(self, value: str | None):
+    def customer_id_set(self, value: str):
         if value is not None:
             self._customer_id = value
 
