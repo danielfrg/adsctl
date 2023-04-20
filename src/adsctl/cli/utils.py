@@ -32,7 +32,15 @@ def create_app(
     return app
 
 
-def get_first_row(response):
-    for row in response:
-        return row
-    return None
+def replace_field(content: str, field: str, prev_value: str, new_value: str) -> str:
+    new_content = content
+
+    field_line = f'{field} = "{prev_value}"'
+
+    occurrences = content.count(field_line)
+
+    if occurrences == 1:
+        new_line = f'{field} = "{new_value}"'
+        new_content = new_content.replace(field_line, new_line)
+
+    return new_content

@@ -90,7 +90,13 @@ client_id = ""
 client_secret = ""
 ```
 
-And use the `current_account` field to control which one the CLI uses.
+Set the current account:
+
+```shell
+adsctl config set-account another
+adsctl config set-account default
+```
+
 
 ## GAQL Prompt
 
