@@ -1,6 +1,6 @@
 from typing import Optional, cast
 
-from adsctl.config.model import RootConfig
+from adsctl.config.model import AccountConfig, RootConfig
 from adsctl.utils.fs import Path, load_toml_data
 
 
@@ -20,6 +20,11 @@ class ConfigFile:
     @path.setter
     def path(self, value):
         self._path = value
+
+    @property
+    def account(self) -> AccountConfig:
+        """Return the Current Account Model"""
+        return self.model.accounts[self.model.current_account]
 
     def save(self, content=None):
         import tomli_w
