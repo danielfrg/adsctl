@@ -13,7 +13,13 @@ from adsctl.prompt.prompt import print_results, prompt_loop
     envvar="ADSCTL_CONFIG",
     help="The path to a custom config file to use [env var: `ADSCTL_CONFIG`]",
 )
-@click.option("--customer-id", "-c", "customer_id_opt", help="Google Ads Customer ID.")
+@click.option(
+    "--account",
+    "-a",
+    "account",
+    help="The account to use. Defaults to the current_account in the config file.",
+)
+@click.option("--customer-id", "-i", "customer_id_opt", help="Google Ads Customer ID.")
 @click.option(
     "--output",
     "-o",
@@ -44,6 +50,7 @@ from adsctl.prompt.prompt import print_results, prompt_loop
 def main(
     ctx: click.Context,
     config_file_path,
+    account,
     customer_id_opt,
     output,
     command,
@@ -52,9 +59,8 @@ def main(
 ):
     """Interactive GAQL prompt"""
 
-    app = create_app(config_file_path, customer_id=customer_id_opt)
+    app = create_app(config_file_path, account=account, customer_id=customer_id_opt)
     app.load_config()
-    # app.create_client()
     ctx.obj = app
 
     variables = dict(v.split("=") for v in variables)

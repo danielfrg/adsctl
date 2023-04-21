@@ -15,7 +15,7 @@ class AccountConfig(BaseModel):
     login_customer_id: str = ""
     oauth: OAuth = OAuth()
 
-    @validator("customer_id")
+    @validator("customer_id", "login_customer_id")
     def valid_customer_id(cls, value, **kwargs):
         if not re.match("^[0-9-]*$", value):
             raise ValueError("Only numbers and dashes allowed in customer_id")
@@ -30,9 +30,8 @@ class AccountConfig(BaseModel):
             "use_proto_plus": False,
         }
 
-        login_customer_id = self.login_customer_id.replace("-", "")
-        if login_customer_id:
-            base["login_customer_id"] = (login_customer_id,)
+        if self.login_customer_id:
+            base["login_customer_id"] = self.login_customer_id
         return base
 
 

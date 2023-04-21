@@ -1,5 +1,3 @@
-from typing import Optional
-
 from google.ads.googleads.client import GoogleAdsClient
 
 from adsctl import client as client_utils
@@ -13,25 +11,25 @@ class Application:
     config_file_path: Path | None
     config_file: ConfigFile
     client: GoogleAdsClient | None
-    _customer_id: Optional[str]
+    _customer_id: str | None
     params: dict = {}
 
     def __init__(
         self,
-        config_file: str | None = None,
-        customer_id: str | None = None,
+        config_file: str | None = None,  # Path to config file
         account: str | None = None,
+        customer_id: str | None = None,
         load_config=True,
     ):
 
         self._customer_id = customer_id
         if config_file is None:
             self.config_file_path = ConfigFile.get_default_location()
-            self.config_file = ConfigFile()
+            self.config_file = ConfigFile(account=account)
         else:
             self.config_file_path = Path(config_file)
             path_ = None if config_file is None else Path(config_file)
-            self.config_file = ConfigFile(path=path_)
+            self.config_file = ConfigFile(path=path_, account=account)
 
         if load_config:
             self.load_config()
@@ -46,19 +44,11 @@ class Application:
 
     @property
     def customer_id(self) -> str | None:
-        if self._customer_id is not None:
+        if self._customer_id:
             return self._customer_id.replace("-", "")
-
-    @customer_id.setter
-    def customer_id_set(self, value: str):
-        if value is not None:
-            self._customer_id = value
 
     def load_config(self):
         self.config_file.load()
-
-        # Use default from __init__ or config file
-        self._customer_id = self._customer_id or self.config_file.account.customer_id
 
     def create_client(self):
         gads_config = self.config_file.account.clientSettings()
@@ -78,7 +68,7 @@ class Application:
     def search(self, query, client, customer_id=None, params: dict | None = None):
         if params is None:
             params = {}
-        customer_id = customer_id or self.customer_id
+        customer_id = customer_id or self.customer_id or self.account.customer_id
         query_ = client_utils.render_template(query.strip(), **params)
 
         ga_service = client.get_service("GoogleAdsService")
@@ -89,7 +79,7 @@ class Application:
     ):
         if params is None:
             params = {}
-        customer_id = customer_id or self.customer_id
+        customer_id = customer_id or self.customer_id or self.account.customer_id
         query_ = client_utils.render_template(query.strip(), **params)
         print(query_)
 

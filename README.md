@@ -26,7 +26,7 @@ Features:
   Like [psql](https://www.postgresql.org/docs/current/app-psql.html) for the Google Ads API.
 - A command line tool for managing Google Ads resources.
   Like [kubectl](https://kubernetes.io/docs/reference/kubectl/) for the Google Ads API.
-- Centralized configuration with _(soon)_ multiple config/account file management
+- Centralized configuration with multiple account management
 - Automatically update refresh token
 - Python API with Pandas integration
 
@@ -55,7 +55,7 @@ adsctl config
 adsctl config explore
 ```
 
-Open the generated config file and fill it with your credentials:
+Open the new default config file and fill it with your credentials:
 Dev Token, Client ID, Client Secret and Customer ID.
 
 To login and get a refresh token:
@@ -65,8 +65,7 @@ adsctl auth <path-to-secret.json>
 ```
 
 The token is saved automatically in the config file.
-
-Other commands:
+You can see it by running:
 
 ```shell
 # View config
@@ -75,10 +74,10 @@ adsctl config view
 
 ### Multiple Accounts
 
-You can manage multiple accounts in the config file by adding new TOML sections.
+You can manage multiple accounts in the config file by adding TOML sections.
 
 ```toml
-current_account = "another"
+current_account = "default"
 
 [... default account ...]
 
@@ -95,8 +94,9 @@ client_secret = ""
 Set the current account:
 
 ```shell
-adsctl config set-account another
-adsctl config set-account default
+$ adsctl config set-account another
+$ adsctl config get-account
+another
 ```
 
 ## GAQL Prompt
@@ -117,17 +117,17 @@ $ gaql
 ```
 
 By default it uses the it in `table` format but you can control the output
-format with the `-o` flag:
+format with the `-o` option:
 
 ```shell
 # Print the plain protobuf response
 $ gaql -o plain
 
-# Print a CSV contents
+# Print the contents of a CSV file
 $ gaql -o csv
 ```
 
-You can also run a single commands and save the output to a file in the specified format:
+You can also run a single inline command and redirect the output to a file:
 
 ```shell
 gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv > my-query.csv
@@ -162,6 +162,11 @@ $ gaql -v id=123456789 -v field=name
 
 >>> SELECT campaign.id, campaign.{{ field }} FROM campaign WHERE campaign.id = {{ id }} ORDER BY campaign.id
 ```
+
+### Other options
+
+You can overwrite the account and customer ID using the `-a` and `-i` options.
+See `gaql --help` for more details.
 
 ## CLI
 

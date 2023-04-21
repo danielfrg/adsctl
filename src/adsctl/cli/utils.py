@@ -1,24 +1,16 @@
 import sys
-from typing import Optional
 
 import click
 
 from adsctl.application import Application
-from adsctl.config.config_file import ConfigFile
 from adsctl.utils.fs import Path
 
 
 def create_app(
-    config_file_path: Optional[str] = None, customer_id: Optional[str] = None
+    config_file_path: str | None = None,
+    customer_id: str | None = None,
+    account: str | None = None,
 ) -> Application:
-    used_config_file = Path()
-
-    app = Application(
-        config_file=ConfigFile(),
-        customer_id=customer_id,
-        load_config=False,
-        create_client=False,
-    )
 
     if config_file_path:
         used_config_file = Path(config_file_path).resolve()
@@ -27,7 +19,13 @@ def create_app(
                 f"The selected config file `{str(config_file_path)}` does not exist."
             )
             sys.exit(1)
-        app.config_file = ConfigFile(used_config_file)
+
+    app = Application(
+        config_file=config_file_path,
+        customer_id=customer_id,
+        account=account,
+        load_config=False,
+    )
 
     return app
 

@@ -19,7 +19,7 @@ def get_rn(campaign_id, app: Application):
 
 def mutate(budget, resource_name: str, app: Application):
     """Set campaign budget."""
-    client = app.client
+    client = app.create_client()
 
     campaign_budget_service = client.get_service("CampaignBudgetService")
     campaign_budget_operation = client.get_type("CampaignBudgetOperation")
@@ -34,7 +34,7 @@ def mutate(budget, resource_name: str, app: Application):
     mask_operation(campaign_budget_operation, updated, client)
 
     response = campaign_budget_service.mutate_campaign_budgets(
-        customer_id=app.customer_id, operations=[campaign_budget_operation]
+        customer_id=app.account.customer_id, operations=[campaign_budget_operation]
     )
 
     return response

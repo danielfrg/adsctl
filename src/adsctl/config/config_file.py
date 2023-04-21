@@ -1,4 +1,4 @@
-from typing import Optional, cast
+from typing import cast
 
 from adsctl.config.model import AccountConfig, RootConfig
 from adsctl.utils.fs import Path, load_toml_data
@@ -9,7 +9,7 @@ class ConfigFile:
     account_name: str | None
 
     def __init__(self, path: Path | None = None, account: str | None = None):
-        self._path: Optional[Path] = path
+        self._path: Path | None = path
         self.model = cast(RootConfig, None)
         self.account_name = account
 

@@ -22,16 +22,16 @@ def get_client(config, version="v13"):
         sys.exit(1)
 
 
-def search(query, client, customer_id):
-    customer_id = customer_id.replace("-", "")
-    ga_service = client.get_service("GoogleAdsService")
-    return ga_service.search(customer_id=customer_id, query=query)
+# def search(query, client, customer_id):
+#     customer_id = customer_id.replace("-", "")
+#     ga_service = client.get_service("GoogleAdsService")
+#     return ga_service.search(customer_id=customer_id, query=query)
 
 
-def search_stream(query, client, customer_id):
-    customer_id = customer_id.replace("-", "")
-    ga_service = client.get_service("GoogleAdsService")
-    return ga_service.search_stream(customer_id=customer_id, query=query)
+# def search_stream(query, client, customer_id):
+#     customer_id = customer_id.replace("-", "")
+#     ga_service = client.get_service("GoogleAdsService")
+#     return ga_service.search_stream(customer_id=customer_id, query=query)
 
 
 def render_template(template: str, **params):
