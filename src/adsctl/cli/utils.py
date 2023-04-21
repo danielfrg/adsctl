@@ -12,8 +12,12 @@ def create_app(
     config_file_path: Optional[str] = None, customer_id: Optional[str] = None
 ) -> Application:
     used_config_file = Path()
+
     app = Application(
-        config_file=ConfigFile(), customer_id=customer_id, create_client=False
+        config_file=ConfigFile(),
+        customer_id=customer_id,
+        load_config=False,
+        create_client=False,
     )
 
     if config_file_path:
@@ -24,25 +28,19 @@ def create_app(
             )
             sys.exit(1)
         app.config_file = ConfigFile(used_config_file)
-    elif not app.config_file.path.is_file():
-        click.echo("No config file found, creating one with default settings now...")
-
-        try:
-            app.config_file.restore()
-            click.echo(f"Default config file created at: {app.config_file.path}")
-            click.echo("Edit that file to include your Google Ads credentials.")
-            sys.exit(0)
-        except OSError:  # no cov
-            click.echo(
-                f"Unable to create config file located at"
-                f"`{str(app.config_file.path)}`. Please check your permissions.",
-                err=True,
-            )
 
     return app
 
 
-def get_first_row(response):
-    for row in response:
-        return row
-    return None
+def replace_field(content: str, field: str, prev_value: str, new_value: str) -> str:
+    new_content = content
+
+    field_line = f'{field} = "{prev_value}"'
+
+    occurrences = content.count(field_line)
+
+    if occurrences == 1:
+        new_line = f'{field} = "{new_value}"'
+        new_content = new_content.replace(field_line, new_line)
+
+    return new_content

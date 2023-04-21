@@ -36,8 +36,11 @@ def main(ctx: click.Context, config_file_path, enable_logging):
         )
         logging.getLogger("google.ads.googleads.client").setLevel(logging.INFO)
 
-    app = create_app(config_file_path)
-    ctx.obj = app
+    try:
+        app = create_app(config_file_path)
+        ctx.obj = app
+    except Exception as e:
+        click.echo(f"Error loading config: {e}")
 
 
 main.add_command(auth)

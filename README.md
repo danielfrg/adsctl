@@ -55,7 +55,6 @@ adsctl config explore
 
 Open the generated config file and fill it with your credentials:
 Dev Token, Client ID, Client Secret and Customer ID.
-Don't add the `refresh_token`.
 
 To login and get a refresh token:
 
@@ -63,14 +62,41 @@ To login and get a refresh token:
 adsctl auth <path-to-secret.json>
 ```
 
-The token is saved automatically in the configuration file.
+The token is saved automatically in the config file.
 
 Other commands:
 
 ```shell
 # View config
-adsctl config show
+adsctl config view
 ```
+
+### Multiple Accounts
+
+You can manage multiple accounts in the config file by adding new TOML sections.
+
+```toml
+current_account = "another"
+
+[... default account ...]
+
+[accounts.another]
+developer_token = ""
+customer_id = ""
+login_customer_id = ""
+
+[accounts.another.oauth]
+client_id = ""
+client_secret = ""
+```
+
+Set the current account:
+
+```shell
+adsctl config set-account another
+adsctl config set-account default
+```
+
 
 ## GAQL Prompt
 

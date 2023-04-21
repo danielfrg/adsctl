@@ -1,5 +1,9 @@
 # adsctl Change Log
 
+## unreleased
+
+- Config support multiple accounts
+
 ## 0.2.0
 
 - Prompt support multiple outputs

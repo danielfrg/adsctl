@@ -51,6 +51,11 @@ class Path(_PathBase):
 
             shutil.rmtree(self, ignore_errors=False)
 
+    def write(self, data: str) -> None:
+        self.parent.mkdir(parents=True, exist_ok=True)
+        with self.open("w") as f:
+            f.write(data)
+
     def write_atomic(self, data: str | bytes, *args: Any, **kwargs: Any) -> None:
         from tempfile import mkstemp
 
