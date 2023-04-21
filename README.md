@@ -18,6 +18,8 @@
 
 Google Ads Interface for humans.
 
+_This is a work in progress, please open an issue if you find any bugs or have any suggestions._
+
 Features:
 
 - A command line tool for executing GAQL queries against the Google Ads API.
