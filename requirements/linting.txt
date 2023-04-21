@@ -14,8 +14,12 @@ click==8.1.3
     #   pip-tools
 isort==5.12.0
     # via -r requirements/linting.in
+mypy==1.2.0
+    # via -r requirements/linting.in
 mypy-extensions==1.0.0
-    # via black
+    # via
+    #   black
+    #   mypy
 packaging==23.1
     # via
     #   black
@@ -34,7 +38,10 @@ tomli==2.0.1
     # via
     #   black
     #   build
+    #   mypy
     #   pyproject-hooks
+typing-extensions==4.5.0
+    # via mypy
 wheel==0.40.0
     # via pip-tools
 

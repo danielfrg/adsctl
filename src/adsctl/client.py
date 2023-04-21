@@ -1,5 +1,6 @@
 import sys
 
+import jinja2
 from google.ads.googleads.client import GoogleAdsClient
 from google.ads.googleads.errors import GoogleAdsException
 
@@ -31,3 +32,11 @@ def search_stream(query, client, customer_id):
     customer_id = customer_id.replace("-", "")
     ga_service = client.get_service("GoogleAdsService")
     return ga_service.search_stream(customer_id=customer_id, query=query)
+
+
+def render_template(template: str, **params):
+    if params is None:
+        params = {}
+    environment = jinja2.Environment()
+    template_ = environment.from_string(template)
+    return template_.render(**params)

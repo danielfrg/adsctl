@@ -5,10 +5,11 @@ from google.ads.googleads.errors import GoogleAdsException
 from prompt_toolkit import PromptSession
 from tabulate import tabulate
 
+from adsctl.application import Application
 from adsctl.parse import parseStream
 
 
-def prompt_loop(ga_service, customer_id, output="table"):
+def prompt_loop(app: Application, output="table", params: dict | None = None):
     session = PromptSession()
 
     while True:
@@ -21,7 +22,8 @@ def prompt_loop(ga_service, customer_id, output="table"):
             if query == "exit":
                 sys.exit(0)
 
-            results = make_query(ga_service, customer_id, query, output=output)
+            results = app.query(query=query, params=params)
+            # results = make_query(ga_service, customer_id, query, output=output)
 
             if results is None:
                 continue
@@ -38,10 +40,11 @@ def prompt_loop(ga_service, customer_id, output="table"):
             sys.exit()
 
 
-def make_query(ga_service, customer_id, query, output="table") -> None | list | dict:
-    stream = ga_service.search_stream(customer_id=customer_id, query=query)
-
+def make_query(
+    app: Application, query, output="table", params: dict | None = None
+) -> None | list | dict:
     results = None
+    stream = app.search_stream(query, params=params)
 
     if output == "plain":
         results = []

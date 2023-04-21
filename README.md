@@ -97,7 +97,6 @@ adsctl config set-account another
 adsctl config set-account default
 ```
 
-
 ## GAQL Prompt
 
 An interactive shell for executing GAQL queries against the Google Ads API.
@@ -129,7 +128,7 @@ $ gaql -o csv
 You can also run a single commands and save the output to a file in the specified format:
 
 ```shell
-$ gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv > my-query.csv
+gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id' -o csv > my-query.csv
 ```
 
 This assumes only table is returned but in more complex queries that include other
@@ -142,6 +141,24 @@ $ gaql -c 'SELECT campaign.id, campaign.name FROM campaign ORDER BY campaign.id'
 
 $ ls
 campaign.csv
+```
+
+### Query variables
+
+You can specify one or more variables using the jinja syntax, those
+variables will be replaced with the values specified in the `-v` options.
+
+```shell
+gaql -c 'SELECT campaign.id, campaign.name FROM campaign WHERE campaign.id = {{ id }} ORDER BY campaign.id' -v id=123456789
+```
+
+You can also pass `-v` without a command and use this the variables in the prompt
+queries:
+
+```shell
+$ gaql -v id=123456789 -v field=name
+
+>>> SELECT campaign.id, campaign.{{ field }} FROM campaign WHERE campaign.id = {{ id }} ORDER BY campaign.id
 ```
 
 ## CLI

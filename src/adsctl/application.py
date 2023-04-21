@@ -2,7 +2,7 @@ from typing import Optional
 
 from google.ads.googleads.client import GoogleAdsClient
 
-from adsctl import client
+from adsctl import client as client_utils
 from adsctl.config.config_file import ConfigFile
 from adsctl.config.model import AccountConfig, RootConfig
 from adsctl.parse import parseStream
@@ -52,26 +52,41 @@ class Application:
         self._customer_id = self._customer_id or self.config_file.account.customer_id
 
     def create_client(self):
-        if self.client is None:
-            gads_config = self.config_file.account.clientSettings()
-            self.client = client.get_client(gads_config)
+        gads_config = self.config_file.account.clientSettings()
+        client_ = client_utils.get_client(gads_config)
+        self.client = client_
+        return client_
 
-    def search(self, query, customer_id=None):
+    def query(self, query, customer_id=None, params: dict | None = None):
+        if params is None:
+            params = {}
         customer_id = customer_id or self.config_file.account.customer_id
-        stream = client.search(query.strip(), self.client, customer_id)
-        return stream
-
-    def search_stream(self, query, customer_id=None):
-        customer_id = customer_id or self.config_file.account.customer_id
-        stream = client.search_stream(query.strip(), self.client, customer_id)
-        return stream
-
-    def query(self, query, customer_id=None):
-        stream = self.search_stream(query, customer_id=customer_id)
+        myclient = self.create_client()
+        stream = self.search_stream(query=query, client=myclient, params=params)
         tables = parseStream(stream)
         return tables
 
+    def search(self, query, client, customer_id=None, params: dict | None = None):
+        if params is None:
+            params = {}
+        customer_id = customer_id or self.customer_id
+        query_ = client_utils.render_template(query.strip(), **params)
+
+        ga_service = client.get_service("GoogleAdsService")
+        return ga_service.search(query=query_, customer_id=customer_id)
+
+    def search_stream(
+        self, query, client, customer_id=None, params: dict | None = None
+    ):
+        if params is None:
+            params = {}
+        customer_id = customer_id or self.customer_id
+        query_ = client_utils.render_template(query.strip(), **params)
+        print(query_)
+
+        ga_service = client.get_service("GoogleAdsService")
+        return ga_service.search_stream(query=query_, customer_id=customer_id)
+
 
 # Alias
-GoogleAds = Application
 GoogleAds = Application
