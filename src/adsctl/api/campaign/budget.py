@@ -11,7 +11,8 @@ def get_rn(campaign_id, app: Application):
         WHERE campaign.id = {campaign_id}
     """
 
-    response = app.search(query)
+    client = app.create_client()
+    response = app.search(query, client)
     for row in response:
         return row.campaign.campaign_budget
     return None
@@ -20,7 +21,6 @@ def get_rn(campaign_id, app: Application):
 def mutate(budget, resource_name: str, app: Application):
     """Set campaign budget."""
     client = app.create_client()
-
     campaign_budget_service = client.get_service("CampaignBudgetService")
     campaign_budget_operation = client.get_type("CampaignBudgetOperation")
 

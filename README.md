@@ -240,8 +240,8 @@ campaignBudget
 Or directly get a client to use search_stream directly:
 
 ```python
-gads_client = google_ads.get_client()
-stream = self.search_stream(query=query, client=myclient, params=params)
+gads_client = google_ads.create_client()
+stream = self.search_stream(query, client=myclient)
 
 for batch in stream:
     for row in batch.results:

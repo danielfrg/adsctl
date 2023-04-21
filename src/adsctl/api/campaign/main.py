@@ -10,8 +10,8 @@ def get_rn(id, app: Application):
         WHERE campaign.id = {id}
     """
 
-    response = app.search(query)
+    client = app.create_client()
+    response = app.search(query, client=client)
     for row in response:
         return row.campaign.resource_name
-    return None
     return None

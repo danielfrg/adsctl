@@ -81,7 +81,6 @@ class Application:
             params = {}
         customer_id = customer_id or self.customer_id or self.account.customer_id
         query_ = client_utils.render_template(query.strip(), **params)
-        print(query_)
 
         ga_service = client.get_service("GoogleAdsService")
         return ga_service.search_stream(query=query_, customer_id=customer_id)

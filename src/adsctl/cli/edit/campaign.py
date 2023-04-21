@@ -20,8 +20,6 @@ def campaign(obj, campaign_id):
 @click.pass_obj
 def status(obj: Application, status):
     """Set campaign budget."""
-    obj.create_client()
-    print(obj.account)
     campaign_id = obj.params["campaign_id"]
     campaign_rn = campaign_api.get_rn(campaign_id, app=obj)
 
@@ -38,8 +36,6 @@ def status(obj: Application, status):
 @click.pass_obj
 def budget_(obj: Application, budget):
     """Set campaign budget."""
-    obj.create_client()
-
     campaign_id = obj.params["campaign_id"]
     budget_rn = budget_api.get_rn(campaign_id=campaign_id, app=obj)
 

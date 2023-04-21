@@ -5,13 +5,14 @@ from adsctl.application import Application
 
 
 def get_rn(campaign_id, app: Application) -> str:
-    campaign_service = app.client.get_service("CampaignService")
+    client = app.create_client()
+    campaign_service = client.get_service("CampaignService")
     return campaign_service.campaign_path(app.customer_id, campaign_id)
 
 
 def mutate(status, campaign_id, app: Application):
-    client = app.client
-
+    """Set campaign status."""
+    client = app.create_client()
     campaign_service = client.get_service("CampaignService")
     campaign_operation = client.get_type("CampaignOperation")
 
