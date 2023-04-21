@@ -3,6 +3,7 @@ import sys
 import click
 from google.ads.googleads.errors import GoogleAdsException
 from prompt_toolkit import PromptSession
+from prompt_toolkit.history import FileHistory
 from tabulate import tabulate
 
 from adsctl.application import Application
@@ -10,7 +11,13 @@ from adsctl.parse import parseStream
 
 
 def prompt_loop(app: Application, output="table", params: dict | None = None):
-    session = PromptSession()
+    if app.config_file_path is None:
+        my_history = None
+    else:
+        history_file = app.config_file_path.parent / "history.txt"
+        my_history = FileHistory(str(history_file))
+
+    session = PromptSession(history=my_history)
 
     while True:
         try:
@@ -77,4 +84,5 @@ def print_results(results, output="table"):
     elif output == "csv":
         for _, df in results.items():
             if len(df) > 0:
+                click.echo(df.to_csv(index=False))
                 click.echo(df.to_csv(index=False))
