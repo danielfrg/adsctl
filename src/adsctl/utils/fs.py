@@ -11,12 +11,6 @@ else:
     import tomli as tomllib
 
 
-if sys.platform == "win32":
-    _PathBase = pathlib.WindowsPath
-else:
-    _PathBase = pathlib.PosixPath
-
-
 disk_sync = os.fsync
 # https://mjtsai.com/blog/2022/02/17/apple-ssd-benchmarks-and-f_fullsync/
 # https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/fsync.2.html
@@ -29,7 +23,10 @@ if sys.platform == "darwin":
             fcntl.fcntl(fd, fcntl.F_FULLFSYNC)
 
 
-class Path(_PathBase):
+class Path(type(pathlib.Path())):
+    def __new__(cls, *pathsegments):
+        return super().__new__(cls, *pathsegments)
+
     def ensure_dir_exists(self) -> None:
         self.mkdir(parents=True, exist_ok=True)
 

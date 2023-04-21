@@ -1,4 +1,6 @@
-from pydantic import BaseModel, BaseSettings
+import re
+
+from pydantic import BaseModel, BaseSettings, validator
 
 
 class OAuth(BaseModel):
@@ -12,6 +14,12 @@ class AccountConfig(BaseModel):
     customer_id: str = ""
     login_customer_id: str = ""
     oauth: OAuth = OAuth()
+
+    @validator("customer_id")
+    def valid_customer_id(cls, value, **kwargs):
+        if not re.match("^[0-9-]*$", value):
+            raise ValueError("Only numbers and dashes allowed in customer_id")
+        return value.replace("-", "")
 
     def clientSettings(self):
         base = {

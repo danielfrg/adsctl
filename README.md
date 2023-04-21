@@ -204,10 +204,10 @@ SELECT campaign.name,
   campaign.bidding_strategy_type
 FROM campaign
 WHERE segments.date DURING LAST_7_DAYS
-  AND campaign.status != 'REMOVED'
+  AND campaign.status != '{{ status }}'
 """
 
-tables = adsctl.query(get_campaigns_query)
+tables = adsctl.query(get_campaigns_query, params={"status": "REMOVED"}})
 
 # Print Pandas DataFrames
 for table_name, table in tables.items():
@@ -230,15 +230,11 @@ campaignBudget
 0  customers/XXXXXXXXXX/campaignBudgets/ZZZZZZZZZZZ      1000000
 ```
 
-Or directly make a `search` or `search_stream` request:
+Or directly get a client to use search_stream directly:
 
 ```python
-results = google_ads.search(query)
-...
-
-# ----
-
-stream = google_ads.search_stream(query)
+gads_client = google_ads.get_client()
+stream = self.search_stream(query=query, client=myclient, params=params)
 
 for batch in stream:
     for row in batch.results:

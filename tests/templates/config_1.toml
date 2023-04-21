@@ -1,0 +1,20 @@
+current_account = "default"
+
+[accounts.default]
+customer_id = "123-456-7890"
+developer_token = "AAAAAAAAAA"
+login_customer_id = "777-777-7777"
+
+[accounts.default.oauth]
+refresh_token = ""
+client_id = ""
+client_secret = ""
+
+[accounts.second]
+customer_id = "908-765-4321"
+developer_token = "BBBBBBBBBB"
+
+[accounts.second.oauth]
+refresh_token = ""
+client_id = ""
+client_secret = ""

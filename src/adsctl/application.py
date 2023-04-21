@@ -6,26 +6,35 @@ from adsctl import client as client_utils
 from adsctl.config.config_file import ConfigFile
 from adsctl.config.model import AccountConfig, RootConfig
 from adsctl.parse import parseStream
+from adsctl.utils.fs import Path
 
 
 class Application:
+    config_file_path: Path | None
     config_file: ConfigFile
     client: GoogleAdsClient | None
     _customer_id: Optional[str]
     params: dict = {}
 
     def __init__(
-        self, config_file=None, customer_id=None, load_config=True, create_client=True
+        self,
+        config_file: str | None = None,
+        customer_id: str | None = None,
+        account: str | None = None,
+        load_config=True,
     ):
-        self.config_file = config_file or ConfigFile()
+
         self._customer_id = customer_id
+        if config_file is None:
+            self.config_file_path = ConfigFile.get_default_location()
+            self.config_file = ConfigFile()
+        else:
+            self.config_file_path = Path(config_file)
+            path_ = None if config_file is None else Path(config_file)
+            self.config_file = ConfigFile(path=path_)
 
         if load_config:
             self.load_config()
-
-        self.client = None
-        if create_client:
-            self.create_client()
 
     @property
     def config(self) -> RootConfig:
