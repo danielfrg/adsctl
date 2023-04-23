@@ -30,6 +30,13 @@ jobs:
       - uses: actions/checkout@v3
       - uses: arduino/setup-task@v1
 
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install rye
+        run: cargo install --git https://github.com/mitsuhiko/rye rye
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -44,15 +51,13 @@ jobs:
             ${{ runner.os }}
             python-${{ matrix.python-version }}
             ${{ hashFiles('pyproject.toml') }}
-            ${{ hashFiles('requirements/*') }}
+            ${{ hashFiles('requirements.lock') }}
+            ${{ hashFiles('requirements-devlock') }}
 
       - name: Install dependencies
         if: steps.cached-python-env.outputs.cache-hit != 'true'
         run: |
-          pip install -r requirements/pyproject.txt
-
-      - name: Install Hatch
-        run: pip install --upgrade hatch
+          pip install -r requirements-dev.lock
 
       - name: Print Python info
         run: |
