@@ -9,6 +9,10 @@ tasks:
     cmds:
       - rye run test
 
+  test:ci:
+    cmds:
+      - pytest
+
   test:all:
     cmds:
       - rye run test-adsapi
