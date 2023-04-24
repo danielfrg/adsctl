@@ -70,7 +70,9 @@ jobs:
           pip freeze
 
       - name: Build Python package
-        run: task build
+        run: |
+          hatch run build
+          pip install dist/*.whl
 
       - name: Run tests
         run: task test
