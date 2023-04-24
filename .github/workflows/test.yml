@@ -30,12 +30,14 @@ jobs:
       - uses: actions/checkout@v3
       - uses: arduino/setup-task@v1
 
-      - uses: actions-rs/toolchain@v1
+      - name: Install cargo-hack
+        uses: baptiste0928/cargo-install@v2
         with:
-          toolchain: stable
+          crate: rye
+          args: "--git https://github.com/mitsuhiko/rye"
 
-      - name: Install rye
-        run: cargo install --git https://github.com/mitsuhiko/rye rye
+      # - name: Install rye
+      #   run: cargo install --git https://github.com/mitsuhiko/rye rye
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
@@ -71,7 +73,7 @@ jobs:
 
       - name: Build Python package
         run: |
-          hatch run build
+          hatch build
           pip install dist/*.whl
 
       - name: Run tests
