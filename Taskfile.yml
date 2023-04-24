@@ -27,7 +27,7 @@ tasks:
   check:
     ignore_error: true
     cmds:
-      # - mypy  # :)
       - ruff src/adsctl
       - black src --check
       - isort src --check-only
+      # - mypy  # :)
