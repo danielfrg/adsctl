@@ -31,3 +31,8 @@ tasks:
       - black src --check
       - isort src --check-only
       # - mypy  # :)
+
+  lockfiles:
+    cmds:
+      - pip-compile -q --resolver=backtracking -o requirements/pyproject.txt pyproject.toml --extra=test
+      - pip-compile -q --resolver=backtracking -o requirements/linting.txt requirements/linting.in
