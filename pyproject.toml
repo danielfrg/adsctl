@@ -27,38 +27,27 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-[project.urls]
-Documentation = "https://github.com/danielfrg/adsctl#readme"
-Issues = "https://github.com/danielfrg/adsctl/issues"
-Source = "https://github.com/danielfrg/adsctl"
-
-[project.optional-dependencies]
-test = ["coverage[toml]", "pytest", "pytest-cov"]
+# [project.optional-dependencies]
+# test = []
 
 [project.scripts]
 gaql = "adsctl.prompt.cli:main"
 adsctl = "adsctl.cli.cli:main"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[tool.rye]
+dev-dependencies = [
+  "black~=23.3.0",
+  "hatch~=1.7.0",
+  "isort~=6.0.0b2",
+  "mypy~=1.2.0",
+  "ruff~=0.0.262",
+  "coverage[toml]", "pytest", "pytest-cov"
+]
 
-[tool.hatch.build]
-exclude = [".github"]
-
-[tool.hatch.version]
-path = "src/adsctl/__about__.py"
-
-[tool.hatch.envs.default]
-features = ["test"]
-dependencies = ["black", "isort", "mypy", "pip-tools", "ruff"]
-
-[tool.hatch.envs.default.scripts]
-check-style = ["ruff {args:.}", "black --check --diff {args:.}"]
-fmt = ["black {args:.}", "ruff --fix {args:.}", "style"]
-test = "cov --no-cov {args}"
-test-adsapi = "cov --no-cov --ads-api {args}"
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests {args}"
+[tool.rye.scripts]
+test = "pytest --no-cov"
+testall = "pytest --no-cov --ads-api"
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -92,3 +81,18 @@ profile = "black"
 
 [tool.mypy]
 strict = true
+
+[tool.hatch.build]
+exclude = [".github"]
+
+[tool.hatch.version]
+path = "src/adsctl/__about__.py"
+
+[project.urls]
+Documentation = "https://github.com/danielfrg/adsctl#readme"
+Issues = "https://github.com/danielfrg/adsctl/issues"
+Source = "https://github.com/danielfrg/adsctl"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,5 +1,0 @@
-black
-isort
-mypy
-pip-tools
-ruff
