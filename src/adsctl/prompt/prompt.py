@@ -3,11 +3,14 @@ import sys
 import click
 from google.ads.googleads.errors import GoogleAdsException
 from prompt_toolkit import PromptSession
+from prompt_toolkit.completion import FuzzyCompleter, ThreadedCompleter
 from prompt_toolkit.history import FileHistory
 from tabulate import tabulate
 
 from adsctl.application import Application
 from adsctl.parse import parseStream
+from adsctl.prompt.completer import MyCustomCompleter
+from adsctl.prompt.key_bindings import adsctl_bindings
 
 
 def prompt_loop(app: Application, output="table", params: dict | None = None):
@@ -17,7 +20,15 @@ def prompt_loop(app: Application, output="table", params: dict | None = None):
         history_file = app.config_file_path.parent / "history.txt"
         my_history = FileHistory(str(history_file))
 
-    session = PromptSession(history=my_history)
+    key_bindings = adsctl_bindings()
+    completer = ThreadedCompleter(FuzzyCompleter(MyCustomCompleter()))
+    session = PromptSession(
+        history=my_history,
+        completer=completer,
+        complete_while_typing=True,
+        key_bindings=key_bindings,
+        multiline=True,
+    )
 
     while True:
         try:
@@ -82,6 +93,10 @@ def print_results(results, output="table"):
             else:
                 click.echo(tabulate(df, headers="keys", tablefmt="psql"))
     elif output == "csv":
+        for _, df in results.items():
+            if len(df) > 0:
+                click.echo(df.to_csv(index=False))
+                click.echo(df.to_csv(index=False))
         for _, df in results.items():
             if len(df) > 0:
                 click.echo(df.to_csv(index=False))
