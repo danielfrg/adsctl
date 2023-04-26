@@ -46,6 +46,8 @@ class Application:
     def customer_id(self) -> str | None:
         if self._customer_id:
             return self._customer_id.replace("-", "")
+        else:
+            return self.account.customer_id.replace("-", "")
 
     def load_config(self):
         self.config_file.load()
