@@ -1,6 +1,6 @@
 # adsctl Change Log
 
-## unreleased
+## 0.3.0
 
 - Config support multiple accounts
 
