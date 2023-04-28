@@ -43,15 +43,13 @@ jobs:
             ${{ runner.os }}
             python-${{ matrix.python-version }}
             ${{ hashFiles('pyproject.toml') }}
-            ${{ hashFiles('requirements.lock') }}
-            ${{ hashFiles('requirements-dev.lock') }}
+            ${{ hashFiles('requirements/*') }}
 
       - name: Install dependencies
         if: steps.cached-python-env.outputs.cache-hit != 'true'
         run: |
-          # Remove editable installs from lock file
-          sed -i '/^-e file:/d' requirements-dev.lock
-          pip install -r requirements-dev.lock
+          pip install -r requirements/pyproject.txt
+          pip install hatch
 
       - name: Print Python info
         run: |
@@ -67,4 +65,4 @@ jobs:
           pip install dist/*.whl
 
       - name: Run tests
-        run: task test:ci
+        run: task test

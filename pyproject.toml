@@ -27,24 +27,26 @@ dependencies = [
 ]
 dynamic = ["version"]
 
-# [project.optional-dependencies]
-# test = []
+[project.optional-dependencies]
+test = ["coverage[toml]", "pytest", "pytest-cov"]
 
 [project.scripts]
 gaql = "adsctl.prompt.cli:main"
 adsctl = "adsctl.cli.cli:main"
 
-[tool.rye]
-dev-dependencies = [
+[tool.hatch.envs.default]
+features = ["test"]
+dependencies = [
   "black~=23.3.0",
   "hatch~=1.7.0",
+  "ipython~=8.12.0",
   "isort~=6.0.0b2",
   "mypy~=1.2.0",
   "ruff~=0.0.262",
-  "coverage[toml]", "pytest", "pytest-cov"
-, "ipython~=8.12.0"]
+  "pip-tools"
+]
 
-[tool.rye.scripts]
+[tool.hatch.envs.default.scripts]
 test = "pytest --no-cov"
 testall = "pytest --no-cov --ads-api"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests"
@@ -69,11 +71,11 @@ exclude_lines = ["no cov", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
 
 [tool.ruff]
 select = [
-    "E",  # pycodestyle errors
-    "W",  # pycodestyle warnings
-    "F",  # pyflakes
-    # "I",  # isort
-    "B",  # flake8-bugbear
+  "E", # pycodestyle errors
+  "W", # pycodestyle warnings
+  "F", # pyflakes
+  # "I",  # isort
+  "B", # flake8-bugbear
 ]
 
 [tool.isort]

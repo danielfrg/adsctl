@@ -3,19 +3,15 @@ version: "3"
 tasks:
   build:
     cmds:
-      - rye run hatch build
+      - hatch build
 
   test:
     cmds:
-      - rye run test
-
-  test:ci:
-    cmds:
-      - pytest
+      - hatch run test
 
   test:all:
     cmds:
-      - rye run test-adsapi
+      - hatch run test-adsapi
 
   test:watch:
     cmds:
@@ -35,3 +31,8 @@ tasks:
       - black src --check
       - isort src --check-only
       # - mypy  # :)
+
+  lockfiles:
+    cmds:
+      - pip-compile -q --resolver=backtracking --no-annotate --no-header -o requirements/pyproject.txt pyproject.toml --extra=test
+      - pip-compile -q --resolver=backtracking --no-annotate --no-header -o requirements/linting.txt requirements/linting.in
