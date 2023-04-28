@@ -17,10 +17,6 @@ tasks:
     cmds:
       - fd . './' | entr -c task test
 
-  test:ci:
-    cmds:
-      - pytest
-
   fmt:
     ignore_error: true
     cmds:
@@ -38,5 +34,5 @@ tasks:
 
   lockfiles:
     cmds:
-      - pip-compile -q --resolver=backtracking -o requirements/pyproject.txt pyproject.toml --extra=test
-      - pip-compile -q --resolver=backtracking -o requirements/linting.txt requirements/linting.in
+      - pip-compile -q --resolver=backtracking --no-annotate --no-header -o requirements/pyproject.txt pyproject.toml --extra=test
+      - pip-compile -q --resolver=backtracking --no-annotate --no-header -o requirements/linting.txt requirements/linting.in
