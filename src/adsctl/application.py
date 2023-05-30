@@ -13,6 +13,7 @@ class Application:
     client: GoogleAdsClient | None
     _customer_id: str | None
     params: dict = {}
+    api_version: str = "v13"
 
     def __init__(
         self,
@@ -54,7 +55,7 @@ class Application:
 
     def create_client(self):
         gads_config = self.config_file.account.clientSettings()
-        client_ = client_utils.get_client(gads_config)
+        client_ = client_utils.get_client(gads_config, version=self.api_version)
         self.client = client_
         return client_
 
