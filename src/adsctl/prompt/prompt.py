@@ -21,11 +21,11 @@ def prompt_loop(app: Application, output="table", params: dict | None = None):
         my_history = FileHistory(str(history_file))
 
     key_bindings = adsctl_bindings()
-    completer = ThreadedCompleter(FuzzyCompleter(MyCustomCompleter()))
+    ThreadedCompleter(FuzzyCompleter(MyCustomCompleter()))
     session = PromptSession(
         history=my_history,
-        completer=completer,
-        complete_while_typing=True,
+        # completer=completer,
+        # complete_while_typing=True,
         key_bindings=key_bindings,
         multiline=True,
     )

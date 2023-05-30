@@ -24,6 +24,7 @@ dependencies = [
   "prompt_toolkit>=3.0.38",
   "tomli-w>=1.0",
   "tomlkit>=0.11.1",
+  "Pillow>=9.5.0",
 ]
 dynamic = ["version"]
 
