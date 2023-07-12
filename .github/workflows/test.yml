@@ -61,7 +61,7 @@ jobs:
 
       - name: Build Python package
         run: |
-          rye run hatch build
+          hatch build
           pip install dist/*.whl
 
       - name: Run tests
