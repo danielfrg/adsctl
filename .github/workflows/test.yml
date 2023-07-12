@@ -65,4 +65,4 @@ jobs:
           pip install dist/*.whl
 
       - name: Run tests
-        run: task test
+        run: task test:ci
