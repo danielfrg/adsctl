@@ -1,5 +1,9 @@
 # adsctl Change Log
 
+## 0.4.0
+
+- Support Python 3.8 and 3.9
+
 ## 0.3.0
 
 - Config support multiple accounts

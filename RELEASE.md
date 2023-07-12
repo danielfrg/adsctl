@@ -9,8 +9,8 @@
 export VERSION=1.0.0
 
 # Build
-hatch build
-hatch publish
+rye build
+rye publish
 
 git commit -am "Release ${VERSION}" --allow-empty
 git tag ${VERSION}
