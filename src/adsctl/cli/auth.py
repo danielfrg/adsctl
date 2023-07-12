@@ -3,6 +3,7 @@ import os
 import re
 import socket
 import sys
+from typing import Union
 from urllib.parse import unquote
 
 import click
@@ -95,7 +96,7 @@ def auth(app: Application, secrets_file):
     click.echo("Done! You can now run adsctl commands.")
 
 
-def oauth_flow(secrets_file: str) -> str | None:
+def oauth_flow(secrets_file: str) -> Union[str, None]:
     """Do the OAuth flow to get a refresh token."""
 
     # if args.additional_scopes:

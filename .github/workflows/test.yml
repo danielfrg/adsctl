@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         # os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.8", 3.9", "3.10", "3.11"]
 
     runs-on: ubuntu-latest
 
@@ -43,12 +43,12 @@ jobs:
             ${{ runner.os }}
             python-${{ matrix.python-version }}
             ${{ hashFiles('pyproject.toml') }}
-            ${{ hashFiles('requirements/*') }}
+            ${{ hashFiles('requirements*.txt') }}
 
       - name: Install dependencies
         if: steps.cached-python-env.outputs.cache-hit != 'true'
         run: |
-          pip install -r requirements/pyproject.txt
+          pip install -r requirements.lock
           pip install hatch
 
       - name: Print Python info
@@ -59,9 +59,14 @@ jobs:
           pip --version
           pip freeze
 
+      - name: Install Rye
+        run: |
+          curl -sSf https://rye-up.com/get | bash
+          rye --version
+
       - name: Build Python package
         run: |
-          hatch build
+          rye build
           pip install dist/*.whl
 
       - name: Run tests

@@ -1,4 +1,5 @@
 import re
+from typing import Dict, Union
 
 from pydantic import BaseModel, BaseSettings, validator
 
@@ -6,7 +7,7 @@ from pydantic import BaseModel, BaseSettings, validator
 class OAuth(BaseModel):
     client_id: str = ""
     client_secret: str = ""
-    refresh_token: str | None = None
+    refresh_token: Union[str, None] = None
 
 
 class AccountConfig(BaseModel):
@@ -37,7 +38,7 @@ class AccountConfig(BaseModel):
 
 class RootConfig(BaseSettings):
     current_account: str = "default"
-    accounts: dict[str, AccountConfig] = {
+    accounts: Dict[str, AccountConfig] = {
         "default": AccountConfig(),
     }
 

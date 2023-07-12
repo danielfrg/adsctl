@@ -1,4 +1,5 @@
 import sys
+from typing import Union
 
 import click
 from google.ads.googleads.errors import GoogleAdsException
@@ -13,7 +14,7 @@ from adsctl.prompt.completer import MyCustomCompleter
 from adsctl.prompt.key_bindings import adsctl_bindings
 
 
-def prompt_loop(app: Application, output="table", params: dict | None = None):
+def prompt_loop(app: Application, output="table", params: Union[dict, None] = None):
     if app.config_file_path is None:
         my_history = None
     else:
@@ -59,7 +60,7 @@ def prompt_loop(app: Application, output="table", params: dict | None = None):
 
 
 def make_query(
-    app: Application, query, output="table", params: dict | None = None
+    app: Application, query, output="table", params: Union[dict, None] = None
 ) -> None | list | dict:
     results = None
     stream = app.search_stream(query, params=params)

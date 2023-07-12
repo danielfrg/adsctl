@@ -2,13 +2,15 @@
 name = "adsctl"
 description = "Google Ads Control CLI and Prompt"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 license = "Apache-2.0"
 keywords = ["google ads", "google ads api", "cli", "prompt"]
 authors = [{ name = "Daniel Rodriguez", email = "daniel@danielfrg.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: Implementation :: CPython",
@@ -35,19 +37,18 @@ test = ["coverage[toml]", "pytest", "pytest-cov"]
 gaql = "adsctl.prompt.cli:main"
 adsctl = "adsctl.cli.cli:main"
 
-[tool.hatch.envs.default]
-features = ["test"]
-dependencies = [
+[tool.rye]
+dev-dependencies = [
   "black~=23.3.0",
   "hatch~=1.7.0",
   "ipython~=8.12.0",
   "isort~=5.12.0",
   "mypy~=1.2.0",
   "ruff~=0.0.262",
-  "pip-tools"
+  "pip-tools",
 ]
 
-[tool.hatch.envs.default.scripts]
+[tool.rye.scripts]
 test = "pytest --no-cov"
 testall = "pytest --no-cov --ads-api"
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=src/adsctl --cov=tests"

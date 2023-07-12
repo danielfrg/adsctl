@@ -3,15 +3,19 @@ version: "3"
 tasks:
   build:
     cmds:
-      - hatch build
+      - rye build
+
+  install:
+    cmds:
+      - rye sync --all-features
 
   test:
     cmds:
-      - hatch run test
+      - rye run test
 
   test:all:
     cmds:
-      - hatch run test-adsapi
+      - rye run test-adsapi
 
   test:watch:
     cmds:
