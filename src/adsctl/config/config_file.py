@@ -1,4 +1,4 @@
-from typing import cast
+from typing import Union, cast
 
 from adsctl.config.model import AccountConfig, RootConfig
 from adsctl.utils.fs import Path, load_toml_data
@@ -6,10 +6,12 @@ from adsctl.utils.fs import Path, load_toml_data
 
 class ConfigFile:
     model: RootConfig
-    account_name: str | None
+    account_name: Union[str, None]
 
-    def __init__(self, path: Path | None = None, account: str | None = None):
-        self._path: Path | None = path
+    def __init__(
+        self, path: Union[Path, None] = None, account: Union[str, None] = None
+    ):
+        self._path: Union[Path, None] = path
         self.model = cast(RootConfig, None)
         self.account_name = account
 

@@ -1,3 +1,5 @@
+from typing import Union
+
 from google.ads.googleads.client import GoogleAdsClient
 
 from adsctl import client as client_utils
@@ -8,21 +10,20 @@ from adsctl.utils.fs import Path
 
 
 class Application:
-    config_file_path: Path | None
+    config_file_path: Union[Path, None]
     config_file: ConfigFile
-    client: GoogleAdsClient | None
-    _customer_id: str | None
+    client: Union[GoogleAdsClient, None]
+    _customer_id: Union[str, None]
     params: dict = {}
     api_version: str = "v13"
 
     def __init__(
         self,
-        config_file: str | None = None,  # Path to config file
-        account: str | None = None,
-        customer_id: str | None = None,
+        config_file: Union[str, None] = None,  # Path to config file
+        account: Union[str, None] = None,
+        customer_id: Union[str, None] = None,
         load_config=True,
     ):
-
         self._customer_id = customer_id
         if config_file is None:
             self.config_file_path = ConfigFile.get_default_location()
@@ -44,7 +45,7 @@ class Application:
         return self.config_file.account
 
     @property
-    def customer_id(self) -> str | None:
+    def customer_id(self) -> Union[str, None]:
         if self._customer_id:
             return self._customer_id.replace("-", "")
         else:
@@ -59,7 +60,7 @@ class Application:
         self.client = client_
         return client_
 
-    def query(self, query, customer_id=None, params: dict | None = None):
+    def query(self, query, customer_id=None, params: Union[dict, None] = None):
         if params is None:
             params = {}
         customer_id = customer_id or self.config_file.account.customer_id
@@ -68,7 +69,7 @@ class Application:
         tables = parseStream(stream)
         return tables
 
-    def search(self, query, client, customer_id=None, params: dict | None = None):
+    def search(self, query, client, customer_id=None, params: Union[dict, None] = None):
         if params is None:
             params = {}
         customer_id = customer_id or self.customer_id or self.account.customer_id
@@ -78,7 +79,7 @@ class Application:
         return ga_service.search(query=query_, customer_id=customer_id)
 
     def search_stream(
-        self, query, client, customer_id=None, params: dict | None = None
+        self, query, client, customer_id=None, params: Union[dict, None] = None
     ):
         if params is None:
             params = {}

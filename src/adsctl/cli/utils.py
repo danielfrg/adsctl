@@ -1,4 +1,5 @@
 import sys
+from typing import Union
 
 import click
 
@@ -7,9 +8,9 @@ from adsctl.utils.fs import Path
 
 
 def create_app(
-    config_file_path: str | None = None,
-    customer_id: str | None = None,
-    account: str | None = None,
+    config_file_path: Union[str, None] = None,
+    customer_id: Union[str, None] = None,
+    account: Union[str, None] = None,
 ) -> Application:
 
     if config_file_path:
