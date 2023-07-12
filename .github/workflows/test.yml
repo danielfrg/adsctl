@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         if: steps.cached-python-env.outputs.cache-hit != 'true'
         run: |
-          pip install -r requirements.lock
+          pip install -r requirements-dev.lock
           pip install hatch
 
       - name: Print Python info
