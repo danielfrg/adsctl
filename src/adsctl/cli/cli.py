@@ -7,6 +7,7 @@ from adsctl.cli.auth import auth
 from adsctl.cli.config import config
 from adsctl.cli.create.main import create
 from adsctl.cli.edit.main import edit
+from adsctl.cli.get.main import get
 from adsctl.cli.utils import create_app
 
 
@@ -45,6 +46,7 @@ def main(ctx: click.Context, config_file_path, enable_logging):
 
 
 main.add_command(auth)
+main.add_command(get)
 main.add_command(edit)
 main.add_command(create)
 main.add_command(config)

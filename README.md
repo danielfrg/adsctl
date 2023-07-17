@@ -172,17 +172,44 @@ See `gaql --help` for more details.
 
 ### Campaign Management
 
-#### Status management
+#### Get campaigns
+
+````shell
 
 ```shell
-adsctl campaign -i <campaign-id> status enabled
-adsctl campaign -i <campaign-id> status paused
+adsctl get campaign
+````
+
+```plain
+Name                                          Status             Id
+--------------------------------------------  --------  -----------
+Interplanetary Cruise Campaign #168961427368  Paused    20370195066
+Interplanetary Cruise Campaign #168961215970  Paused    20379497161
+```
+
+#### Status Management
+
+```shell
+adsctl edit campaign -i <campaign-id> status enabled
+
+adsctl edit campaign -i 20370195066 status enabled
+```
+
+```shell
+adsctl get campaign
+```
+
+```plain
+Name                                          Status             Id
+--------------------------------------------  --------  -----------
+Interplanetary Cruise Campaign #168961427368  Enabled   20370195066
+Interplanetary Cruise Campaign #168961215970  Paused    20379497161
 ```
 
 #### Update budget
 
 ```shell
-adsctl campaign -i <campaign-id> budget <amount>
+adsctl edit campaign -i <campaign-id> budget <amount>
 ```
 
 ## Python API
