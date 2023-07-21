@@ -60,34 +60,70 @@ class Application:
         self.client = client_
         return client_
 
-    def query(self, query, customer_id=None, params: Union[dict, None] = None):
+    def query(
+        self, query, customer_id=None, params: Union[dict, None] = None, **kwargs
+    ):
         if params is None:
             params = {}
         customer_id = customer_id or self.config_file.account.customer_id
-        myclient = self.create_client()
-        stream = self.search_stream(query=query, client=myclient, params=params)
-        tables = parseStream(stream)
+
+        results = self.search_stream(query=query, params=params, **kwargs)
+
+        tables = parseStream(results)
         return tables
 
-    def search(self, query, client, customer_id=None, params: Union[dict, None] = None):
-        if params is None:
-            params = {}
-        customer_id = customer_id or self.customer_id or self.account.customer_id
-        query_ = client_utils.render_template(query.strip(), **params)
-
-        ga_service = client.get_service("GoogleAdsService")
-        return ga_service.search(query=query_, customer_id=customer_id)
-
-    def search_stream(
-        self, query, client, customer_id=None, params: Union[dict, None] = None
+    def search(
+        self, query, customer_id=None, params: Union[dict, None] = None, **kwargs
     ):
         if params is None:
             params = {}
         customer_id = customer_id or self.customer_id or self.account.customer_id
         query_ = client_utils.render_template(query.strip(), **params)
 
-        ga_service = client.get_service("GoogleAdsService")
-        return ga_service.search_stream(query=query_, customer_id=customer_id)
+        myclient = self.create_client()
+        ga_service = myclient.get_service("GoogleAdsService")
+
+        request = kwargs or {}
+        request["query"] = query_
+        request["customer_id"] = customer_id
+
+        results = ga_service.search(request=request)
+        rows = []
+        for row in results:
+            rows.append(row)
+
+        if results.summary_row:
+            rows.append(results.summary_row)
+
+        return rows
+
+    def search_stream(
+        self, query, customer_id=None, params: Union[dict, None] = None, **kwargs
+    ):
+        if params is None:
+            params = {}
+        customer_id = customer_id or self.customer_id or self.account.customer_id
+        query_ = client_utils.render_template(query.strip(), **params)
+
+        myclient = self.create_client()
+        ga_service = myclient.get_service("GoogleAdsService")
+
+        request = kwargs or {}
+        request["query"] = query_
+        request["customer_id"] = customer_id
+
+        stream = ga_service.search_stream(request=request)
+
+        rows = []
+        for batch in stream:
+            print(batch)
+            for row in batch.results:
+                rows.append(row)
+
+            if batch.summary_row:
+                rows.append(batch.summary_row)
+
+        return rows
 
 
 # Alias
