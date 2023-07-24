@@ -13,24 +13,15 @@ WHERE campaign.status IN ('ENABLED', 'PAUSED')
 @click.command()
 @click.pass_obj
 def campaign(app: Application):
-    client = app.create_client()
-
-    status_enums = client.enums.CampaignStatusEnum
-
-    status_map = {
-        status_enums.ENABLED: "Enabled",
-        status_enums.PAUSED: "Paused",
-        status_enums.REMOVED: "Removed",
-    }
+    app.create_client()
 
     query.format(status="ENABLED")
-    response = app.search(query, client)
+    tables = app.query(query)
 
     table = []
-    for row in response:
-        table.append(
-            [row.campaign.name, status_map[row.campaign.status], row.campaign.id]
-        )
+    for _index, row in tables["campaign"].iterrows():
+        print(row)
+        table.append([row["name"], row.status, row.id])
 
     headers = ["Name", "Status", "Id"]
 

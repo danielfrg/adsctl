@@ -116,7 +116,6 @@ class Application:
 
         rows = []
         for batch in stream:
-            print(batch)
             for row in batch.results:
                 rows.append(row)
 
