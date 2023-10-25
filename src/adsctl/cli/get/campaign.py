@@ -20,7 +20,6 @@ def campaign(app: Application):
 
     table = []
     for _index, row in tables["campaign"].iterrows():
-        print(row)
         table.append([row["name"], row.status, row.id])
 
     headers = ["Name", "Status", "Id"]

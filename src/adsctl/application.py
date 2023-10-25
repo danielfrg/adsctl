@@ -61,7 +61,12 @@ class Application:
         return client_
 
     def query(
-        self, query, customer_id=None, params: Union[dict, None] = None, **kwargs
+        self,
+        query,
+        customer_id=None,
+        params: Union[dict, None] = None,
+        raw=True,
+        **kwargs,
     ):
         if params is None:
             params = {}
@@ -69,6 +74,8 @@ class Application:
 
         results = self.search_stream(query=query, params=params, **kwargs)
 
+        if raw:
+            return results
         tables = parseStream(results)
         return tables
 
