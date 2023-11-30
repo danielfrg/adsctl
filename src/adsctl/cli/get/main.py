@@ -1,6 +1,7 @@
 import click
 
 from adsctl.application import Application
+from adsctl.cli.get.ad_group import ad_group
 from adsctl.cli.get.campaign import campaign
 
 
@@ -14,3 +15,4 @@ def get(app: Application):
 
 
 get.add_command(campaign)
+get.add_command(ad_group)

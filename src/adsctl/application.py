@@ -65,7 +65,7 @@ class Application:
         query,
         customer_id=None,
         params: Union[dict, None] = None,
-        raw=True,
+        raw=False,
         **kwargs,
     ):
         if params is None:
