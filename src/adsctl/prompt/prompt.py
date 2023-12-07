@@ -42,16 +42,15 @@ def prompt_loop(app: Application, output="table", params: Union[dict, None] = No
 
             results = app.query(query=query, params=params)
 
-            print(results)
-
             if output == "plain":
                 results = []
                 for batch in results:
                     for row in batch.results:
                         results.append(row)
             elif output in ("table", "csv", "csv-files"):
-                for table, df in results.items():
-                    results[table] = df
+                if results is not None:
+                    for table, df in results.items():
+                        results[table] = df
 
             if results is None:
                 continue

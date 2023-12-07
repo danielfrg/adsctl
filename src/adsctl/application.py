@@ -76,8 +76,11 @@ class Application:
 
         if raw:
             return results
-        tables = parseStream(results)
-        return tables
+        try:
+            tables = parseStream(results)
+            return tables
+        except Exception:
+            print(results)
 
     def search(
         self, query, customer_id=None, params: Union[dict, None] = None, **kwargs
