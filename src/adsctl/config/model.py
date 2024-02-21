@@ -41,6 +41,7 @@ class RootConfig(BaseSettings):
     accounts: Dict[str, AccountConfig] = {
         "default": AccountConfig(),
     }
+    logging: bool = True
 
     class Config:
         env_prefix = "adsctl_"

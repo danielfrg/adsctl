@@ -11,8 +11,7 @@ def get_rn(campaign_id, app: Application):
         WHERE campaign.id = {campaign_id}
     """
 
-    client = app.create_client()
-    response = app.search(query, client)
+    response = app.search(query)
     for row in response:
         return row.campaign.campaign_budget
     return None

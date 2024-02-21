@@ -15,7 +15,7 @@ class Application:
     client: Union[GoogleAdsClient, None]
     _customer_id: Union[str, None]
     params: dict = {}
-    api_version: str = "v13"
+    api_version: str = "v14"
 
     def __init__(
         self,
@@ -58,6 +58,16 @@ class Application:
         gads_config = self.config_file.account.clientSettings()
         client_ = client_utils.get_client(gads_config, version=self.api_version)
         self.client = client_
+
+        if self.config.logging:
+            import logging
+
+            logging.basicConfig(
+                level=logging.INFO,
+                format="[%(asctime)s - %(levelname)s] %(message).5000s",
+            )
+            logging.getLogger("google.ads.googleads.client").setLevel(logging.DEBUG)
+
         return client_
 
     def query(

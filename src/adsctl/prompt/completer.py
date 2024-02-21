@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Iterable
 
-from google.ads.googleads.v13.services.types import google_ads_service
+from google.ads.googleads.v15.services.types import google_ads_service
 from prompt_toolkit.completion import CompleteEvent, Completer, Completion
 from prompt_toolkit.document import Document
 
